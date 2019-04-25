@@ -166,8 +166,10 @@ def outputRange():    # Read for actual output range
 
 
 def scandata(cont=False,cont_mode=0):    # Get LIDAR Data
-    if cont == "True":
-        data = send_cmd('sEN LMDscandata', cont_mode)  # Send Telegrams Continuously
+    if cont == True:
+        data = send_cmd('sEN LMDscandata '+ str(cont_mode))  # Send Telegrams Continuously
+    elif cont == False:
+        data = send_cmd('sEN LMDscandata '+ str(cont_mode))  # Send Telegrams Continuously
     else:
         data = send_cmd('sRN LMDscandata')#  # Request single telegram
     return data
