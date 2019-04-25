@@ -46,7 +46,6 @@ lidar.set_configuration()
 #   Basic Settings
 
 def send_cmd(cmd):
-    try:
         lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
         arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
         return "".join(chr(x) for x in arr)
