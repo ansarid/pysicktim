@@ -1,0 +1,1 @@
+SUBSYSTEM=="usb",SYSFS{idVendor} =="19a2", SYSFS{idProduct} =="5001",GROUP="sick", MODE="0666"

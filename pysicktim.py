@@ -1,5 +1,6 @@
 import usb.core
 import usb.util
+import time
 
 '''
 
@@ -46,46 +47,49 @@ lidar.set_configuration()
 #   Basic Settings
 
 def send_cmd(cmd):
-        lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
-        arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
-        return "".join(chr(x) for x in arr)
+    lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
 
-def LMPscancfg():   # Read for frequency and angular resolution
+def read():
+    arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
+    return "".join(chr(x) for x in arr)
+
+
+def scancfg():   # Read for frequency and angular resolution
     # Request Read Command
     # sRN LMPscancfg
-    data = send_cmd('sRN LMPscancfg').split()
+    data = send_cmd('sRN LMPscancfg')
     return data
 
-def LMCstartmeas():   # Start measurement
+def startmeas():   # Start measurement
     # sMN LMCstartmeas
-    data = send_cmd('sMN LMCstartmeas').split()
+    data = send_cmd('sMN LMCstartmeas')
     return data
     #   Start the laser and (unless in Standby mode) the motor of the the device
 
-def LMCstopmeas():   # Stop measurement
+def stopmeas():   # Stop measurement
     # sMN LMCstopmeas
-    data = send_cmd('sMN LMCstopmeas').split()
+    data = send_cmd('sMN LMCstopmeas')
     return data
 
-def mSCloadfacdef():   # Load factory defaults
+def loadfacdef():   # Load factory defaults
     # sMN mSCloadfacdef
-    data = send_cmd('sMN mSCloadfacdef').split()
+    data = send_cmd('sMN mSCloadfacdef')
     return data
 #   Shut off the laser and stop the motor of the the device
 
-# def LMPscancfg():    # Load factory defaults
+# def ancfg():    # Load factory defaults
     # sAN mSCloadfacdef
-#     data = send_cmd('sAN mSCloadfacdef').split()
+#     data = send_cmd('sAN mSCloadfacdef')
 #     return data
 
-def mSCloadappdef():    # Load application defaults
+def loadappdef():    # Load application defaults
     # sMN mSCloadappdef
-    data = send_cmd('sMN mSCloadappdef').split()
+    data = send_cmd('sMN mSCloadappdef')
     return data
 
-# def LMPscancfg():    # Load factory defaults
+# def ancfg():    # Load factory defaults
     # sAN mSCloadappdef
-#     data = send_cmd('sAN mSCloadappdef').split()
+#     data = send_cmd('sAN mSCloadappdef')
 #     return data
 
 
@@ -93,16 +97,16 @@ def mSCloadappdef():    # Load application defaults
 
 def CheckPassword():    # Check password
     # sMN CheckPassword 03 19 20 E4 C9
-    data = send_cmd('sMN CheckPassword').split()
+    data = send_cmd('sMN CheckPassword')
     return data
     # sAN CheckPassword  1
 
 
 
 
-def mSCreboot():    # Reboot device
+def reboot():    # Reboot device
     # sMN mSCreboot
-    data = send_cmd('sMN mSCreboot').split()
+    data = send_cmd('sMN mSCreboot')#
     return data
     # sAN mSCreboot
 
@@ -110,9 +114,9 @@ def mSCreboot():    # Reboot device
 
 
 
-def sMN mEEwriteall():    # Save parameters permanently
+def writeall():    # Save parameters permanently
     # sMN mEEwriteall
-    data = send_cmd('sMN mEEwriteall').split()
+    data = send_cmd('sMN mEEwriteall')
     return data
     # sAN mEEwriteall 1
 
@@ -120,7 +124,7 @@ def sMN mEEwriteall():    # Save parameters permanently
 
 def Run():    # Set to run
     # sMN Run
-    data = send_cmd('sMN Run').split()
+    data = send_cmd('sMN Run')
     return data
     # sAN Run 1
 
@@ -133,39 +137,39 @@ def Run():    # Set to run
 
 
 
-def LMDscandatacfg():    # Configure the data content for the scan
+def scandatacfg():    # Configure the data content for the scan
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0 0 0 0 +1
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0  0 0 +10
     # sWN LMDscandatacfg 02 0 0 1 0 01 0 0 0 0 0 +10
-    data = send_cmd('sWN LMDscandatacfg').split()
+    data = send_cmd('sWN LMDscandatacfg')
     return data
     # sWA LMDscandatacfg
 
 
 
-def LMPoutputRange():    # Configure measurement angle of the scandata for output
+def outputRange():    # Configure measurement angle of the scandata for output
     # sWN LMPoutputRange 1 1388 0 DBBA0
-    data = send_cmd('sWN LMPoutputRange').split()
+    data = send_cmd('sWN LMPoutputRange')
     return data
     # sWA LMPoutputRange
 
 
 
 
-def LMPoutputRange():    # Read for actual output range
+def outputRange():    # Read for actual output range
     # sRN LMPoutputRange
-    data = send_cmd('sRN LMPoutputRange').split()
+    data = send_cmd('sRN LMPoutputRange')
     return data
     # sRA LMPoutputRange 1 1388 FFF92230 225510
 
 
 
 
-def LMDscandata(cont=False,cont_mode=0):    # Get LIDAR Data
+def scandata(cont=False,cont_mode=0):    # Get LIDAR Data
     if cont == "True":
-        data = send_cmd('sEN LMDscandata', cont_mode).split()  # Send Telegrams Continuously
+        data = send_cmd('sEN LMDscandata', cont_mode)  # Send Telegrams Continuously
     else:
-        data = send_cmd('sRN LMDscandata').split()  # Request single telegram
+        data = send_cmd('sRN LMDscandata')#  # Request single telegram
     return data
 # LMDscandata - reserved values PAGE 80
 
@@ -177,18 +181,18 @@ def LMDscandata(cont=False,cont_mode=0):    # Get LIDAR Data
 
 
 
-def LFPparticle():    # Set particle filter
+def particle():    # Set particle filter
     # sWN LFPparticle 1 +500
-    data = send_cmd('sWN LFPparticle').split()
+    data = send_cmd('sWN LFPparticle')
     return data
     # sWA LFPparticle
 
 
 
 
-def LFPmeanfilter():    # Set mean filter
+def meanfilter():    # Set mean filter
     # sWN LFPmeanfilter 1 +10 0
-    data = send_cmd('sWN LFPmeanfilter').split()
+    data = send_cmd('sWN LFPmeanfilter')
     return data
     # sWA LFPmeanfilter
 
@@ -201,24 +205,24 @@ def LFPmeanfilter():    # Set mean filter
 
 
 
-def LIDoutputstate():    # Read state of the outputs
+def outputstate():    # Read state of the outputs
     # sRN LIDoutputstate
-    data = send_cmd('sRN LIDoutputstate').split()
+    data = send_cmd('sRN LIDoutputstate')
     return data
 
 
-def LIDoutputstate():    # Send outputstate by event
+def outputstate():    # Send outputstate by event
     # sEN LIDoutputstate 1
-    data = send_cmd('sEN LIDoutputstate').split()
+    data = send_cmd('sEN LIDoutputstate')
     return data
 
 
 
 
 
-def mDOSetOutput():    # Set output state
+def SetOutput():    # Set output state
     # sMN mDOSetOutput 1 1
-    data = send_cmd('sMN mDOSetOutput').split()
+    data = send_cmd('sMN mDOSetOutput')
     return data
     # sAN mDOSetOutput 1
 
@@ -227,9 +231,9 @@ def mDOSetOutput():    # Set output state
 #   Inputs
 
 
-def DI3DebTim():    # Set debouncing time for input x
+def DebTim():    # Set debouncing time for input x
     # sWN DI3DebTim +10
-    data = send_cmd('sWN DI3DebTim').split()
+    data = send_cmd('sWN DI3DebTim')
     return data
     # sWA DI3DebTim
 
@@ -239,51 +243,51 @@ def DI3DebTim():    # Set debouncing time for input x
 
 def DeviceIdent():    # Read device ident
     # sRN DeviceIdent
-    data = send_cmd('sRN DeviceIdent').split()
+    data = send_cmd('sRN DeviceIdent')
     return data
     # sRA DeviceIdent 10 LMS10x_FieldEval 10 V1.36-21.10.2010
 
 
 
-def SCdevicestate():    # Read device state
+def devicestate():    # Read device state
     # sRN SCdevicestate
-    data = send_cmd('sRN SCdevicestate').split()
+    data = send_cmd('sRN SCdevicestate')
     return data
     # sRA SCdevicestate 0
 
 
 
 
-def DIornr():    # Read device information
+def ornr():    # Read device information
     # sRN DIornr
-    data = send_cmd('sRN DIornr').split()
+    data = send_cmd('sRN DIornr')
     return data
     # sRA DIornr 1071419
 
 
 
 
-def DItype():    # Device type
+def type():    # Device type
     # sRN DItype
-    data = send_cmd('sRN DItype').split()
+    data = send_cmd('sRN DItype')
     return data
     # sRA DItype E TIM561-2050101
 
 
 
 
-def ODoprh():    # Read operating hours
+def oprh():    # Read operating hours
     # sRN ODoprh
-    data = send_cmd('sRN ODoprh').split()
+    data = send_cmd('sRN ODoprh')
     return data
     # sRA ODoprh 2DC8B
 
 
 
 
-def ODpwrc():    # Read power on counter
+def pwrc():    # Read power on counter
     # sRN ODpwrc
-    data = send_cmd('sRN ODpwrc').split()
+    data = send_cmd('sRN ODpwrc')
     return data
     # sRA ODpwrc 752D
 
@@ -292,7 +296,7 @@ def ODpwrc():    # Read power on counter
 
 def LocationName():    # Set device name
     # sWN LocationName +13 OutdoorDevice
-    data = send_cmd('sWN LocationName').split()
+    data = send_cmd('sWN LocationName')
     return data
     # sWA LocationName
 
@@ -301,19 +305,15 @@ def LocationName():    # Set device name
 
 def LocationName():    # Read for device name
     # sRN LocationName
-    data = send_cmd('sRN LocationName').split()
+    data = send_cmd('sRN LocationName')
     return data
     # sRA LocationName D OutdoorDevice
 
 
 
 
-def LIDrstoutpcnt():    # Reset output counter
+def rstoutpcnt():    # Reset output counter
     # sMN LIDrstoutpcnt
-    data = send_cmd('sMN LIDrstoutpcnt').split()
+    data = send_cmd('sMN LIDrstoutpcnt')
     return data
     # sAN LIDrstoutpcnt 0
-
-while 1:
-    data = LMDscandata()
-    print(data)
