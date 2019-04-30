@@ -265,7 +265,7 @@ def outputRange():    # Read for actual output range
     return answer
     # sRA LMPoutputRange 1 1388 FFF92230 225510
 
-def scandata(cont=False,cont_mode=0):    # Get LIDAR Data
+def scan(cont=False,cont_mode=0):    # Get LIDAR Data
     if cont == False:
         send('sRN LMDscandata')
         answer = read()
