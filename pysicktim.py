@@ -1,9 +1,9 @@
 import usb.core
 import usb.util
 import time
+import unicodedata
 
 '''
-
     Command basics
     ┌──────────────────┬────────────────┬────────────────────────────────┬────────────────────────────────┐
     │   Description    │ Value ASCII    │ Value Hex                      │ Value Binary                   │
@@ -28,16 +28,11 @@ import time
     ├──────────────────┼────────────────┼────────────────────────────────┬────────────────────────────────┤
     │   Space          │ {SPC}          │ 20                             │ 20                             │
     └──────────────────┴────────────────┴────────────────────────────────┴────────────────────────────────┘
-
     If values are divided into two parts (e.g. measurement data), they are documented
     according to LSB 0 (e.g. 00 07), output however is according to MSB (e.g. 07 00).
-
 '''
-
 ################################################################
-
 #   ERRORS
-
 #
 # class Error(Exception):
 #    """Base class for other exceptions"""
@@ -83,7 +78,7 @@ import time
 #  """It is not possible to issue more than one command at a time to an SRT device."""
 #
 # class Sopas_Error_FLEX_OUT_OF_BOUNDS(Error):
-#  """An array was accessed over its maximum length."""
+#  """An dataay was accessed over its maximum length."""
 #
 # class Sopas_Error_EVENTREG_UNKNOWNINDEX(Error):
 #  """The event you wanted to register for does not exist, the index is unknown."""
@@ -119,193 +114,182 @@ import time
 #  """An asynchronous method call was made although the device was built with “AsyncMethodsSuppressed”. This is an internal error that should never happen in a released device."""
 #
 # class Sopas_Error_ComplexArraysNotSupported(Error):
-#  """Device was built with „ComplexArraysSuppressed“ because the compiler does not allow recursions. But now a complex array was found. This is an internal error that should never happen in a released device."""
+#  """Device was built with „ComplexArraysSuppressed“ because the compiler does not allow recursions. But now a complex dataay was found. This is an internal error that should never happen in a released device."""
 #
 
 
 
 
-
-
-
-
-
-
-
+timeout = 500
 lidar = usb.core.find(idVendor=0x19a2, idProduct=0x5001)
 
 if lidar is None:
     print('LIDAR Device not found!')
     exit()
-# else:
-#     print('LIDAR Device Connected!')
 
-lidar.set_configuration()
 
 ############################################
 #   Basic Settings
 
-def send_cmd(cmd):
+def remove_control_characters(s):
+    s = "".join(ch for ch in s if unicodedata.category(ch)[0]!="C")
+    return s
 
-    lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
+def dec_to_ascii(s):
+    s = "".join(chr(x) for x in s)
+    return s
 
+def check_error(s):
+    if s == "sFA 1":
+        print("ERROR: ", s)
+    else:
+        pass
+
+def parse_str(d):
+    if d == None:
+        return d
+    else:
+        d = d.split()
+        d = d[len(d)-1]
+        return d
+## LIDAR FUNCTIONS ##
 
 def read():
-    try:
-        arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
-        return "".join(chr(x) for x in arr)
-    except usb.core.USBError:
-        return
+    arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
+    return "".join([chr(x) for x in arr[1:-1]])
+
+def send(cmd):
+    print(cmd)
+    lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
+######################
+
+def firmwarev():
+    send('sRN FirmwareVersion')
+    answer = read()
+    return answer
+
+def deviceident():
+    send('sRI0')
+    answer = read()
+    return answer
+
+def setaccessmode(user="03",password="F4724744"):
+    send('sMN SetAccessMode '+user+" "+password)
+    answer = read()
+    return answer
+
 
 def scancfg():   # Read for frequency and angular resolution
     # Request Read Command
     # sRN LMPscancfg
-    answer = send_cmd('sRN LMPscancfg')
+    send('sRN LMPscancfg')
+    answer = read()
     return answer
 
 def startmeas():   # Start measurement
     # sMN LMCstartmeas
-    answer = send_cmd('sMN LMCstartmeas')
+    send('sMN LMCstartmeas')
+    answer = read()
     return answer
     #   Start the laser and (unless in Standby mode) the motor of the the device
 
 def stopmeas():   # Stop measurement
     # sMN LMCstopmeas
-    answer = send_cmd('sMN LMCstopmeas')
+    send('sMN LMCstopmeas')
+    answer = read()
     return answer
 
 def loadfacdef():   # Load factory defaults
     # sMN mSCloadfacdef
-    answer = send_cmd('sMN mSCloadfacdef')
+    send('sMN mSCloadfacdef')
+    answer = read()
     return answer
 #   Shut off the laser and stop the motor of the the device
 
-# def ancfg():    # Load factory defaults
-    # sAN mSCloadfacdef
-#     answer = send_cmd('sAN mSCloadfacdef')
-#     return answer
-
 def loadappdef():    # Load application defaults
     # sMN mSCloadappdef
-    answer = send_cmd('sMN mSCloadappdef')
+    send('sMN mSCloadappdef')
+    answer = read()
     return answer
 
-# def ancfg():    # Load factory defaults
-    # sAN mSCloadappdef
-#     answer = send_cmd('sAN mSCloadappdef')
-#     return answer
-
-
-
-
-def CheckPassword():    # Check password
+def CheckPassword(password):    # Check password
     # sMN CheckPassword 03 19 20 E4 C9
-    answer = send_cmd('sMN CheckPassword')
+    send('sMN CheckPassword '+password)
+    answer = read()
     return answer
     # sAN CheckPassword  1
 
-
-
-
 def reboot():    # Reboot device
     # sMN mSCreboot
-    answer = send_cmd('sMN mSCreboot')#
+    send('sMN mSCreboot')#
+    answer = read()
     return answer
     # sAN mSCreboot
 
-
-
-
-
 def writeall():    # Save parameters permanently
     # sMN mEEwriteall
-    answer = send_cmd('sMN mEEwriteall')
+    send('sMN mEEwriteall')
+    answer = read()
     return answer
     # sAN mEEwriteall 1
 
-
-
-def Run():    # Set to run
+def run():    # Set to run
     # sMN Run
-    answer = send_cmd('sMN Run')
+    send('sMN Run')
+    answer = read()
     return answer
     # sAN Run 1
-
-
-
-
 #####################################################################
 #   Measurement output telegram
-
-
-
 
 def scandatacfg():    # Configure the data content for the scan
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0 0 0 0 +1
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0  0 0 +10
     # sWN LMDscandatacfg 02 0 0 1 0 01 0 0 0 0 0 +10
-    answer = send_cmd('sWN LMDscandatacfg')
+    send('sWN LMDscandatacfg')
+    answer = read()
     return answer
     # sWA LMDscandatacfg
 
-
-
 def outputRange():    # Configure measurement angle of the scandata for output
     # sWN LMPoutputRange 1 1388 0 DBBA0
-    answer = send_cmd('sWN LMPoutputRange')
+    send('sWN LMPoutputRange')
+    answer = read()
     return answer
     # sWA LMPoutputRange
 
-
-
-
 def outputRange():    # Read for actual output range
     # sRN LMPoutputRange
-    answer = send_cmd('sRN LMPoutputRange')
+    send('sRN LMPoutputRange')
+    answer = read()
     return answer
     # sRA LMPoutputRange 1 1388 FFF92230 225510
 
-
-
-
 def scandata(cont=False,cont_mode=0):    # Get LIDAR Data
-
     if cont == False:
-        answer = send_cmd('sRN LMDscandata')  # Request single telegram
-#        answer = read()
+        send('sRN LMDscandata')
+        answer = read()
         return answer
-
     elif cont == True:
-        send_cmd('sEN LMDscandata '+ str(cont_mode))  # Send Telegrams Continuously
-
-
-
+        send('sEN LMDscandata '+ str(cont_mode))  # Send Telegrams Continuously
 # LMDscandata - reserved values PAGE 80
-
-
-
 
 #####################################################################
 #   Filter
 
-
-
 def particle():    # Set particle filter
     # sWN LFPparticle 1 +500
-    answer = send_cmd('sWN LFPparticle')
+    send('sWN LFPparticle')
+    answer = read()
     return answer
     # sWA LFPparticle
 
-
-
-
-def meanfilter():    # Set mean filter
+def meanfilter(status_code=0,number_of_scans="+10"):    # Set mean filter
     # sWN LFPmeanfilter 1 +10 0
-    answer = send_cmd('sWN LFPmeanfilter')
+    send('sWN LFPmeanfilter '+status_code+' '+number_of_scans+' 0')
+    answer = read()
     return answer
     # sWA LFPmeanfilter
-
-
 
 
 #####################################################################
@@ -313,119 +297,94 @@ def meanfilter():    # Set mean filter
 
 
 
-
 def outputstate():    # Read state of the outputs
     # sRN LIDoutputstate
-    answer = send_cmd('sRN LIDoutputstate')
-
+    send('sRN LIDoutputstate')
 
 def eventoutputstate(state):    # Send outputstate by event
-    answer = send_cmd('sEN LIDoutputstate '+str(state))
+    send('sEN LIDoutputstate '+str(state))
+    answer = read()
     return answer
-
-
-
-
 
 def SetOutput():    # Set output state
     # sMN mDOSetOutput 1 1
-    answer = send_cmd('sMN mDOSetOutput')
+    send('sMN mDOSetOutput')
+    answer = read()
     return answer
     # sAN mDOSetOutput 1
-
-
 #####################################################################
 #   Inputs
 
-
 def DebTim():    # Set debouncing time for input x
     # sWN DI3DebTim +10
-    answer = send_cmd('sWN DI3DebTim')
+    send('sWN DI3DebTim')
+    answer = read()
     return answer
     # sWA DI3DebTim
 
-
-
-
-
-def DeviceIdent():    # Read device ident
+def deviceident():    # Read device ident
     # sRN DeviceIdent
-    answer = send_cmd('sRN DeviceIdent')
+    send('sRN DeviceIdent')
+    answer = read()
     return answer
     # sRA DeviceIdent 10 LMS10x_FieldEval 10 V1.36-21.10.2010
 
-
-
 def devicestate():    # Read device state
     # sRN SCdevicestate
-    answer = send_cmd('sRN SCdevicestate')
+    send('sRN SCdevicestate')
+    answer = read()
     return answer
     # sRA SCdevicestate 0
 
-
-
-
 def ornr():    # Read device information
     # sRN DIornr
-    answer = send_cmd('sRN DIornr')
+    send('sRN DIornr')
+    answer = read()
     return answer
     # sRA DIornr 1071419
 
-
-
-
-def type():    # Device type
+def devicetype():    # Device type
     # sRN DItype
-    answer = send_cmd('sRN DItype')
+    send('sRN DItype')
+    answer = read()
     return answer
     # sRA DItype E TIM561-2050101
 
-
-
-
 def oprh():    # Read operating hours
     # sRN ODoprh
-    answer = send_cmd('sRN ODoprh')
+    send('sRN ODoprh')
+    answer = read()
     return answer
     # sRA ODoprh 2DC8B
 
-
-
-
 def pwrc():    # Read power on counter
     # sRN ODpwrc
-    answer = send_cmd('sRN ODpwrc')
+    send('sRN ODpwrc')
+    answer = read()
     return answer
     # sRA ODpwrc 752D
-
-
-
 
 def setLocationName(name):    # Set device name
     # sWN LocationName +13 OutdoorDevice
     name = " " + name
     string = 'sWN LocationName +'+str(len(name)-1)+name
-    answer = send_cmd(string)
+    send(string)
     answer = read()
     return answer
     # sWA LocationName
 
-
-
-
 def readLocationName():    # Read for device name
     # sRN LocationName
-    answer = send_cmd('sRN LocationName')
-    answer = lidar.read()
+    send('sRN LocationName')
+    answer = read()
+    answer = parse_str(answer)
     return answer
     # sRA LocationName D OutdoorDevice
 
-
-
-
 def rstoutpcnt():    # Reset output counter
     # sMN LIDrstoutpcnt
-    answer = send_cmd('sMN LIDrstoutpcnt')
-    time.sleep(0.000001)
+    send('sMN LIDrstoutpcnt')
+    answer = read()
+#    answer = parse_str(answer)
     return answer
     # sAN LIDrstoutpcnt 0
