@@ -61,7 +61,7 @@ closest_deg = 0
 def read_lidar():
 
 
-    data = lidar.read() # Request Reading from LIDAR.
+    data = lidar.scandata() # Request Reading from LIDAR.
     # print(data)
     return data
 
