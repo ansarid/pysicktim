@@ -159,7 +159,6 @@ def read():
     return "".join([chr(x) for x in arr[1:-1]])
 
 def send(cmd):
-    print(cmd)
     lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
 ######################
 
@@ -265,13 +264,23 @@ def outputRange():    # Read for actual output range
     return answer
     # sRA LMPoutputRange 1 1388 FFF92230 225510
 
-def scan(cont=False,cont_mode=0):    # Get LIDAR Data
+def scan(cont=False,cont_mode=0,raw=False):    # Get LIDAR Data
+
     if cont == False:
         send('sRN LMDscandata')
         answer = read()
-        return answer
     elif cont == True:
         send('sEN LMDscandata '+ str(cont_mode))  # Send Telegrams Continuously
+
+    if raw == False:
+        answer = answer.split()
+        answer = answer[26:26+810]
+        answer = [ int(x,16)/1000 for x in answer ]
+        return answer
+
+    elif raw == True:
+        return answer
+
 # LMDscandata - reserved values PAGE 80
 
 #####################################################################
