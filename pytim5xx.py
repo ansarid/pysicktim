@@ -3,34 +3,7 @@ import usb.util
 import time
 import unicodedata
 
-'''
-    Command basics
-    ┌──────────────────┬────────────────┬────────────────────────────────┬────────────────────────────────┐
-    │   Description    │ Value ASCII    │ Value Hex                      │ Value Binary                   │
-    ├──────────────────┼────────────────┼────────────────────────────────┼────────────────────────────────┤
-    │   Start of text  │ <STX>          │ 02                             │ 02 02 02 02 + given length     │
-    ├──────────────────┼────────────────┼────────────────────────────────┼────────────────────────────────┤
-    │   End of text    │ <ETX>          │ 03                             │ Calculated checksum            │
-    ├──────────────────┼────────────────┼────────────────────────────────┴────────────────────────────────┤
-    │   Read           │ sRN            │                             73 52 4E                            │
-    ├──────────────────┼────────────────┼─────────────────────────────────────────────────────────────────┤
-    │   Write          │ sWN            │                             73 57 4E                            │
-    ├──────────────────┼────────────────┼─────────────────────────────────────────────────────────────────┤
-    │   Method         │ sMN            │                             73 4D 4E                            │
-    ├──────────────────┼────────────────┼─────────────────────────────────────────────────────────────────┤
-    │   Event          │ sEN            │                             73 45 4E                            │
-    ├──────────────────┼────────────────┼─────────────────────────────────────────────────────────────────┤
-    │   Answer         │ sRA            │                             73 52 41                            │
-    │                  │ sWA            │                             73 57 41                            │
-    │                  │ sAN            │                             73 41 4E                            │
-    │                  │ sEA            │                             73 45 41                            │
-    │                  │ sSN            │                             73 53 4E                            │
-    ├──────────────────┼────────────────┼────────────────────────────────┬────────────────────────────────┤
-    │   Space          │ {SPC}          │ 20                             │ 20                             │
-    └──────────────────┴────────────────┴────────────────────────────────┴────────────────────────────────┘
-    If values are divided into two parts (e.g. measurement data), they are documented
-    according to LSB 0 (e.g. 00 07), output however is according to MSB (e.g. 07 00).
-'''
+
 ################################################################
 #   ERRORS
 #
@@ -165,45 +138,70 @@ def send(cmd):
 def firmwarev():
     send('sRN FirmwareVersion')
     answer = read()
+    answer = answer.split()
     return answer
 
 def deviceident():
     send('sRI0')
     answer = read()
+    answer = answer.split()
+    answer = answer[3] + ' ' + answer[4] + ' ' + answer[5]
     return answer
 
 def setaccessmode(user="03",password="F4724744"):
     send('sMN SetAccessMode '+user+" "+password)
     answer = read()
-    return answer
-
+    if answer == "sAN SetAccessMode 1":
+        return 0
+    else:
+        return [1,answer]
 
 def scancfg():   # Read for frequency and angular resolution
     # Request Read Command
     # sRN LMPscancfg
     send('sRN LMPscancfg')
     answer = read()
-    return answer
+    answer = answer.split()
+
+    if len(answer) == 7:
+        scan_freq = int(answer[2],16)/100
+        sectors = int(answer[3],16)
+        ang_res = int(answer[4],16)/10000   # Manual says uint_32?
+        start_ang = int(answer[5],32)/10000
+        stop_ang = int(answer[6],32)/10000
+        return [scan_freq,sectors,ang_res,start_ang,stop_ang]
+
+    else:
+        return [1,answer]
 
 def startmeas():   # Start measurement
     # sMN LMCstartmeas
     send('sMN LMCstartmeas')
     answer = read()
-    return answer
+    if answer == "sAN LMCstartmeas 0":
+        return 0
+    else:
+        return [1,answer]
     #   Start the laser and (unless in Standby mode) the motor of the the device
 
 def stopmeas():   # Stop measurement
     # sMN LMCstopmeas
     send('sMN LMCstopmeas')
     answer = read()
-    return answer
+    if answer == "sAN LMCstopmeas 0":
+        return 0
+    else:
+        return [1,answer]
+    #   Shut off the laser and stop the motor of the the device
 
 def loadfacdef():   # Load factory defaults
     # sMN mSCloadfacdef
     send('sMN mSCloadfacdef')
     answer = read()
-    return answer
-#   Shut off the laser and stop the motor of the the device
+    if answer == "sAN mSCloadfacdef":
+        return 0
+    else:
+        return [1,answer]
 
 def loadappdef():    # Load application defaults
     # sMN mSCloadappdef
@@ -211,9 +209,9 @@ def loadappdef():    # Load application defaults
     answer = read()
     return answer
 
-def CheckPassword(password):    # Check password
+def checkpassword(user,password):    # Check password
     # sMN CheckPassword 03 19 20 E4 C9
-    send('sMN CheckPassword '+password)
+    send('sMN CheckPassword '+user+' '+password)
     answer = read()
     return answer
     # sAN CheckPassword  1
@@ -222,7 +220,10 @@ def reboot():    # Reboot device
     # sMN mSCreboot
     send('sMN mSCreboot')#
     answer = read()
-    return answer
+    if answer == "sAN mSCreboot":
+        return 0
+    else:
+        return [1,answer]
     # sAN mSCreboot
 
 def writeall():    # Save parameters permanently
@@ -236,18 +237,29 @@ def run():    # Set to run
     # sMN Run
     send('sMN Run')
     answer = read()
-    return answer
+    if answer == "sAN Run 1":
+        return 0
+    else:
+        return [1,answer]
     # sAN Run 1
+
 #####################################################################
+
 #   Measurement output telegram
 
-def scandatacfg():    # Configure the data content for the scan
+
+#DOES NOT WORK YET
+def scandatacfg(channel='01', rem_ang='00', res=1, unit=1, enc=0, pos='00', name='00', comment=0, time=0, out_rate='+1'):    # Configure the data content for the scan
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0 0 0 0 +1
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0  0 0 +10
     # sWN LMDscandatacfg 02 0 0 1 0 01 0 0 0 0 0 +10
-    send('sWN LMDscandatacfg')
+    send('sWN LMDscandatacfg '+channel+' '+rem_ang+' '+str(res)+' '+str(unit)+' '+str(enc)+' '+pos+' '+name+' '+str(comment)+' '+str(time)+' '+out_rate)
     answer = read()
-    return answer
+    if answer == "sWA LMDscandatacfg":
+        return 0
+    else:
+        return [1,answer]
+
     # sWA LMDscandatacfg
 
 def outputRange():    # Configure measurement angle of the scandata for output
@@ -315,7 +327,7 @@ def eventoutputstate(state):    # Send outputstate by event
     answer = read()
     return answer
 
-def SetOutput():    # Set output state
+def setoutput():    # Set output state
     # sMN mDOSetOutput 1 1
     send('sMN mDOSetOutput')
     answer = read()
@@ -324,7 +336,7 @@ def SetOutput():    # Set output state
 #####################################################################
 #   Inputs
 
-def DebTim():    # Set debouncing time for input x
+def debtim():    # Set debouncing time for input x
     # sWN DI3DebTim +10
     send('sWN DI3DebTim')
     answer = read()
@@ -335,6 +347,8 @@ def deviceident():    # Read device ident
     # sRN DeviceIdent
     send('sRN DeviceIdent')
     answer = read()
+    answer = answer.split()
+    answer = answer[3] + ' ' + answer[4] + ' ' + answer[5]
     return answer
     # sRA DeviceIdent 10 LMS10x_FieldEval 10 V1.36-21.10.2010
 

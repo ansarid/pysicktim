@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib
 from subprocess import Popen, PIPE
 import Adafruit_GPIO.I2C as Adafruit_I2C
-import pysicktim as lidar   #   Import TIM5xx Library
+import pytim5xx as lidar   #   Import TIM5xx Library
 
 import rcpy
 import rcpy.mpu9250 as mpu9250
@@ -44,15 +44,6 @@ telegram_start = 28
 
 max_distance = 2
 
-
-
-
-def read_lidar():
-
-
-    data = lidar.read() # Request Reading from LIDAR.
-    # print(data)
-    return data
 
 def read_encoder(enc):
     try:
@@ -103,7 +94,6 @@ socket.bind(("", port))
 r_encoder = Adafruit_I2C.Device(0x41,1)
 l_encoder  = Adafruit_I2C.Device(0x42,1)
 
-data = lidar.scandata()    # Tell LIDAR to take reading.
 #
 # rcpy.set_state(rcpy.RUNNING)
 #
@@ -124,13 +114,13 @@ try:
     while 1:
 
 
-        data = lidar.scandata()    # Tell LIDAR to take reading.
-        data = read_lidar()
+        data = lidar.scan(raw=True)    # Tell LIDAR to take reading.
 
         l_wheel = int(read_encoder(l_encoder)*10)
         r_wheel = int(read_encoder(r_encoder)*10)
         imu_angle = int(imu()*10)
 
+        print(data)
 
         packet = data + "." +str(l_wheel) + "." + str(r_wheel) + "." + str(imu_angle)
 
