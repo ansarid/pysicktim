@@ -15,7 +15,7 @@ import numpy as np
 import matplotlib
 from subprocess import Popen, PIPE
 import Adafruit_GPIO.I2C as Adafruit_I2C
-import pysicktim as lidar   #   Import TIM5xx Library
+import pytim5xx as lidar   #   Import TIM5xx Library
 
 import rcpy
 import rcpy.mpu9250 as mpu9250
@@ -52,7 +52,7 @@ points = 810
 telegram_start = 28
 
 min_distance = 0.002
-max_distance = 0.4
+max_distance = 0.5
 
 
 closest_deg = 0
@@ -61,7 +61,7 @@ closest_deg = 0
 def read_lidar():
 
 
-    data = lidar.scandata() # Request Reading from LIDAR.
+    data = lidar.scan() # Request Reading from LIDAR.
     # print(data)
     return data
 
@@ -114,7 +114,7 @@ theta = [ float(x) for x in theta ]
 r_encoder = Adafruit_I2C.Device(0x41,1)
 l_encoder  = Adafruit_I2C.Device(0x42,1)
 
-data = lidar.scandata()    # Tell LIDAR to take reading.
+data = lidar.scan(raw=True)    # Tell LIDAR to take reading.
 
 rcpy.set_state(rcpy.RUNNING)
 
@@ -135,8 +135,7 @@ try:
     while rcpy.get_state() != rcpy.EXITING:
 
 
-        data = lidar.scandata()    # Tell LIDAR to take reading.
-        data = read_lidar()
+        data = lidar.scan(raw=True)    # Tell LIDAR to take reading.
 
         l_wheel = int(read_encoder(l_encoder)*10)
         r_wheel = int(read_encoder(r_encoder)*10)
@@ -152,6 +151,7 @@ try:
         #
         #     clients.append(client_ip)
 
+        print(data)
         data = data.split(' ')
         data = data[telegram_start:telegram_start+points]
         data = [ int(x,16)/1000 for x in data ]

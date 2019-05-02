@@ -6,90 +6,66 @@ import unicodedata
 
 ################################################################
 #   ERRORS
-#
-# class Error(Exception):
-#    """Base class for other exceptions"""
-#    pass
-#
-# class Sopas_Error_METHODIN_ACCESSDENIED(Error):
-#  """Wrong userlevel, access to method not allowed"""
-#
-# class Sopas_Error_METHODIN_UNKNOWNINDEX(Error):
-#  """Trying to access a method with an unknown Sopas index"""
-#
-# class Sopas_Error_VARIABLE_UNKNOWNINDEX(Error):
-#  """Trying to access a variable with an unknown Sopas index"""
-#
-# class Sopas_Error_LOCALCONDITIONFAILED(Error):
-#  """Local condition violated, e.g. giving a value that exceeds the minimum or maximum allowed value for this variable"""
-#
-# class Sopas_Error_INVALID_DATA(Error):
-#  """Invalid data given for variable, this errorcode is deprecated (is not used anymore)."""
-#
-# class Sopas_Error_UNKNOWN_ERROR(Error):
-#  """An error with unknown reason occurred, this errorcode is deprecated."""
-#
-# class Sopas_Error_BUFFER_OVERFLOW(Error):
-#  """The communication buffer was too small for the amount of data that should be serialised."""
-#
-# class Sopas_Error_BUFFER_UNDERFLOW(Error):
-#  """More data was expected, the allocated buffer could not be filled."""
-#
-# class Sopas_Error_ERROR_UNKNOWN_TYPE(Error):
-#  """The variable that shall be serialised has an unknown type. This can only happen when there are variables in the firmware of the device that do not exist in the released description of the device. This should never happen."""
-#
-# class Sopas_Error_VARIABLE_WRITE_ACCESSDENIED(Error):
-#  """It is not allowed to write values to this variable. Probably the variable is defined as read-only."""
-#
-# class Sopas_Error_UNKNOWN_CMD_FOR_NAMESERVER(Error):
-#  """When using names instead of indices, a command was issued that the nameserver does not understand."""
-#
-# class Sopas_Error_UNKNOWN_COLA_COMMAND(Error):
-#  """The CoLa protocol specification does not define the given command, command is unknown."""
-#
-# class Sopas_Error_METHODIN_SERVER_BUSY(Error):
-#  """It is not possible to issue more than one command at a time to an SRT device."""
-#
-# class Sopas_Error_FLEX_OUT_OF_BOUNDS(Error):
-#  """An dataay was accessed over its maximum length."""
-#
-# class Sopas_Error_EVENTREG_UNKNOWNINDEX(Error):
-#  """The event you wanted to register for does not exist, the index is unknown."""
-#
-# class Sopas_Error_COLA_A_VALUE_OVERFLOW(Error):
-#  """The value does not fit into the value field, it is too large."""
-#
-# class Sopas_Error_COLA_A_INVALID_CHARACTER(Error):
-#  """Character is unknown, probably not alphanumeric."""
-#
-# class Sopas_Error_OSAI_NO_MESSAGE(Error):
-#  """Only when using SRTOS in the firmware and distributed variables this error can occur. It is an indication that no operating system message could be created. This happens when trying to GET a variable."""
-#
-# class Sopas_Error_OSAI_NO_ANSWER_MESSAGE(Error):
-#  """This is the same as Sopas_Error_OSAI_NO_MESSAGE with the difference that it is thrown when trying to PUT a variable."""
-#
-# class Sopas_Error_INTERNAL(Error):
-#  """Internal error in the firmware, problably a pointer to a parameter was null."""
-#
-# class Sopas_Error_HubAddressCorrupted(Error):
-#  """The Sopas Hubaddress is either too short or too long."""
-#
-# class Sopas_Error_HubAddressDecoding(Error):
-#  """The Sopas Hubaddress is invalid, it can not be decoded (Syntax)."""
-#
-# class Sopas_Error_HubAddressAddressExceeded(Error):
-#  """Too many hubs in the address"""
-#
-# class Sopas_Error_HubAddressBlankExpected(Error):
-#  """When parsing a HubAddress an expected blank was not found. The HubAddress is not valid."""
-#
-# class Sopas_Error_AsyncMethodsAreSuppressed(Error):
-#  """An asynchronous method call was made although the device was built with “AsyncMethodsSuppressed”. This is an internal error that should never happen in a released device."""
-#
-# class Sopas_Error_ComplexArraysNotSupported(Error):
-#  """Device was built with „ComplexArraysSuppressed“ because the compiler does not allow recursions. But now a complex dataay was found. This is an internal error that should never happen in a released device."""
-#
 
+error_codes=[
+    "Sopas_Ok",
+    "Sopas_Error_METHODIN_ACCESSDENIED",
+    "Sopas_Error_METHODIN_UNKNOWNINDEX",
+    "Sopas_Error_VARIABLE_UNKNOWNINDEX",
+    "Sopas_Error_LOCALCONDITIONFAILED",
+    "Sopas_Error_INVALID_DATA",
+    "Sopas_Error_UNKNOWN_ERROR",
+    "Sopas_Error_BUFFER_OVERFLOW",
+    "Sopas_Error_BUFFER_UNDERFLOW",
+    "Sopas_Error_ERROR_UNKNOWN_TYPE",
+    "Sopas_Error_VARIABLE_WRITE_ACCESSDENIED",
+    "Sopas_Error_UNKNOWN_CMD_FOR_NAMESERVER",
+    "Sopas_Error_UNKNOWN_COLA_COMMAND",
+    "Sopas_Error_METHODIN_SERVER_BUSY",
+    "Sopas_Error_FLEX_OUT_OF_BOUNDS",
+    "Sopas_Error_EVENTREG_UNKNOWNINDEX",
+    "Sopas_Error_COLA_A_VALUE_OVERFLOW",
+    "Sopas_Error_COLA_A_INVALID_CHARACTER",
+    "Sopas_Error_OSAI_NO_MESSAGE",
+    "Sopas_Error_OSAI_NO_ANSWER_MESSAGE",
+    "Sopas_Error_INTERNAL",
+    "Sopas_Error_HubAddressCorrupted",
+    "Sopas_Error_HubAddressDecoding",
+    "Sopas_Error_HubAddressAddressExceeded",
+    "Sopas_Error_HubAddressBlankExpected",
+    "Sopas_Error_AsyncMethodsAreSuppressed",
+    "Sopas_Error_ComplexArraysNotSupported"
+]
+
+
+error_descriptions = {
+    "Sopas_Error_METHODIN_ACCESSDENIED": "Wrong userlevel, access to method not allowed",
+    "Sopas_Error_METHODIN_UNKNOWNINDEX": "Trying to access a method with an unknown Sopas index",
+    "Sopas_Error_scandatacfgVARIABLE_UNKNOWNINDEX": "Trying to access a variable with an unknown Sopas index",
+    "Sopas_Error_LOCALCONDITIONFAILED": "Local condition violated, e.g. giving a value that exceeds the minimum or maximum allowed value for this variable",
+    "Sopas_Error_INVALID_DATA": "Invalid data given for variable, this errorcode is deprecated (is not used anymore).",
+    "Sopas_Error_UNKNOWN_ERROR": "An error with unknown reason occurred, this errorcode is deprecated.",
+    "Sopas_Error_BUFFER_OVERFLOW": "The communication buffer was too small for the amount of data that should be serialised.",
+    "Sopas_Error_BUFFER_UNDERFLOW": "More data was expected, the allocated buffer could not be filled.",
+    "Sopas_Error_ERROR_UNKNOWN_TYPE": "The variable that shall be serialised has an unknown type. This can only happen when there are variables in the firmware of the device that do not exist in the released description of the device. This should never happen.",
+    "Sopas_Error_VARIABLE_WRITE_ACCESSDENIED": "It is not allowed to write values to this variable. Probably the variable is defined as read-only.",
+    "Sopas_Error_UNKNOWN_CMD_FOR_NAMESERVER": "When using names instead of indices, a command was issued that the nameserver does not understand.",
+    "Sopas_Error_UNKNOWN_COLA_COMMAND": "The CoLa protocol specification does not define the given command, command is unknown.",
+    "Sopas_Error_METHODIN_SERVER_BUSY": "It is not possible to issue more than one command at a time to an SRT device.",
+    "Sopas_Error_FLEX_OUT_OF_BOUNDS": "An dataay was accessed over its maximum length.",
+    "Sopas_Error_EVENTREG_UNKNOWNINDEX": "The event you wanted to register for does not exist, the index is unknown.",
+    "Sopas_Error_COLA_A_VALUE_OVERFLOW": "The value does not fit into the value field, it is too large.",
+    "Sopas_Error_COLA_A_INVALID_CHARACTER": "Character is unknown, probably not alphanumeric.",
+    "Sopas_Error_OSAI_NO_MESSAGE": "Only when using SRTOS in the firmware and distributed variables this error can occur. It is an indication that no operating system message could be created. This happens when trying to GET a variable.",
+    "Sopas_Error_OSAI_NO_ANSWER_MESSAGE": "This is the same as \"Sopas_Error_OSAI_NO_MESSAGE\" with the difference that it is thrown when trying to PUT a variable.",
+    "Sopas_Error_INTERNAL": "Internal error in the firmware, problably a pointer to a parameter was null.",
+    "Sopas_Error_HubAddressCorrupted": "The Sopas Hubaddress is either too short or too long.",
+    "Sopas_Error_HubAddressDecoding": "The Sopas Hubaddress is invalid, it can not be decoded (Syntax).",
+    "Sopas_Error_HubAddressAddressExceeded": "Too many hubs in the address",
+    "Sopas_Error_HubAddressBlankExpected": "When parsing a HubAddress an expected blank was not found. The HubAddress is not valid.",
+    "Sopas_Error_AsyncMethodsAreSuppressed": "An asynchronous method call was made although the device was built with \“AsyncMethodsSuppressed\”. This is an internal error that should never happen in a released device.",
+    "Sopas_Error_ComplexArraysNotSupported": "Device was built with „ComplexArraysSuppressed“ because the compiler does not allow recursions. But now a complex dataay was found. This is an internal error that should never happen in a released device."
+}
 
 
 
@@ -113,10 +89,12 @@ def dec_to_ascii(s):
     return s
 
 def check_error(s):
-    if s == "sFA 1":
-        print("ERROR: ", s)
+    if s[0:3] == "sFA":
+        error_code = error_codes[int(s[1],16)]
+        error_description = error_descriptions[error_code]
+        return [error_code,error_description]
     else:
-        pass
+        return s
 
 def parse_str(d):
     if d == None:
@@ -125,11 +103,14 @@ def parse_str(d):
         d = d.split()
         d = d[len(d)-1]
         return d
+
 ## LIDAR FUNCTIONS ##
 
 def read():
     arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
-    return "".join([chr(x) for x in arr[1:-1]])
+    arr = "".join([chr(x) for x in arr[1:-1]])
+    arr = check_error(arr)
+    return arr
 
 def send(cmd):
     lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
@@ -154,7 +135,7 @@ def setaccessmode(user="03",password="F4724744"):
     if answer == "sAN SetAccessMode 1":
         return 0
     else:
-        return [1,answer]
+        return answer
 
 def scancfg():   # Read for frequency and angular resolution
     # Request Read Command
@@ -172,7 +153,7 @@ def scancfg():   # Read for frequency and angular resolution
         return [scan_freq,sectors,ang_res,start_ang,stop_ang]
 
     else:
-        return [1,answer]
+        return answer
 
 def startmeas():   # Start measurement
     # sMN LMCstartmeas
@@ -181,7 +162,7 @@ def startmeas():   # Start measurement
     if answer == "sAN LMCstartmeas 0":
         return 0
     else:
-        return [1,answer]
+        return answer
     #   Start the laser and (unless in Standby mode) the motor of the the device
 
 def stopmeas():   # Stop measurement
@@ -191,7 +172,7 @@ def stopmeas():   # Stop measurement
     if answer == "sAN LMCstopmeas 0":
         return 0
     else:
-        return [1,answer]
+        return answer
     #   Shut off the laser and stop the motor of the the device
 
 def loadfacdef():   # Load factory defaults
@@ -201,7 +182,7 @@ def loadfacdef():   # Load factory defaults
     if answer == "sAN mSCloadfacdef":
         return 0
     else:
-        return [1,answer]
+        return answer
 
 def loadappdef():    # Load application defaults
     # sMN mSCloadappdef
@@ -223,7 +204,7 @@ def reboot():    # Reboot device
     if answer == "sAN mSCreboot":
         return 0
     else:
-        return [1,answer]
+        return answer
     # sAN mSCreboot
 
 def writeall():    # Save parameters permanently
@@ -240,7 +221,7 @@ def run():    # Set to run
     if answer == "sAN Run 1":
         return 0
     else:
-        return [1,answer]
+        return answer
     # sAN Run 1
 
 #####################################################################
@@ -249,16 +230,16 @@ def run():    # Set to run
 
 
 #DOES NOT WORK YET
-def scandatacfg(channel='01', rem_ang='00', res=1, unit=1, enc=0, pos='00', name='00', comment=0, time=0, out_rate='+1'):    # Configure the data content for the scan
+def scandatacfg(channel='01 00', rem_ang=1, res=1, unit=0, enc='00 00', pos=0, name=0, comment=0, time=0, out_rate='+1'):    # Configure the data content for the scan
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0 0 0 0 +1
     # sWN LMDscandatacfg 01 00 1 1 0 00 00 0  0 0 +10
     # sWN LMDscandatacfg 02 0 0 1 0 01 0 0 0 0 0 +10
-    send('sWN LMDscandatacfg '+channel+' '+rem_ang+' '+str(res)+' '+str(unit)+' '+str(enc)+' '+pos+' '+name+' '+str(comment)+' '+str(time)+' '+out_rate)
+    send('sWN LMDscandatacfg '+str(channel)+' '+str(rem_ang)+' '+str(res)+' '+str(unit)+' '+str(enc)+' '+str(pos)+' '+str(name)+' '+str(comment)+' '+str(time)+' '+str(out_rate))
     answer = read()
     if answer == "sWA LMDscandatacfg":
         return 0
     else:
-        return [1,answer]
+        return answer
 
     # sWA LMDscandatacfg
 
