@@ -120,6 +120,7 @@ def firmwarev():
     send('sRN FirmwareVersion')
     answer = read()
     answer = answer.split()
+    answer = answer[-1]
     return answer
 
 def deviceident():
