@@ -67,8 +67,8 @@ print("Amount of Data:\t\t\t",data_amnt)
 # print(distances)
 # print(data[26:26+data_amnt])
 
-# distance_start =
-# distance_end =
+# distance_start = data.index('DIST1')
+# distance_end = data.index('DIST1') + data_amnt
 
 distances = lidar.hex_to_meters(data[26:26+data_amnt])
 # print(distances)
