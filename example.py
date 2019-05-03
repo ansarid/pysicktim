@@ -19,12 +19,12 @@ def uint32(i):
 
 os.system('clear')
 
-# data = lidar.scan(raw=True)
-data = lidar.demo_data(1)
+data = lidar.scan()
+# data = lidar.demo_data(1)
 # data = lidar.demo_data(2)
 
-# data = data.split()
-# print(data)
+print(data)
+data = data.split()
 
 # cmd_type = data[0]
 # cmd = data[1]
@@ -45,7 +45,7 @@ for index, item in enumerate(data):
 
 # print(data)
 
-print("\nTelegram Length: ", len(data), "\n")
+print("Telegram Length: ", len(data), "\n")
 
 print("Command Type:\t",data[0])
 print("Command     :\t",data[1])
