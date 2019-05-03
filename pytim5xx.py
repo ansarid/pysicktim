@@ -299,19 +299,6 @@ def scan(raw=False):    # Get LIDAR Data
     send('sRN LMDscandata')
     raw_data = read()
     data = raw_data
-    # return data
-
-    # if cont == False:
-    #     send('sRN LMDscandata')
-    #     answer = read()
-    # elif cont == True:
-    #     send('sEN LMDscandata '+ str(cont_mode))  # Send Telegrams Continuously
-
-    # if raw == True:
-        # answer = answer.split()
-        # answer = answer[26:26+810]
-        # # answer = [ int(x,16)/1000 for x in answer ]
-        # answer = hex_to_meters(answer)
 
     if raw == False:
 
@@ -347,74 +334,29 @@ def scan(raw=False):    # Get LIDAR Data
 
         scan.num_16bit_chan = int(data[19],16)
 
-
         if scan.dist_start != None:
 
             scan.dist_label = data[20]
-
-            # print("Scale Factor:\t\t\t",int(data[dist_start+1],16))
-            scan.scale_fact = int(data[scan.dist_start+1],16)
-
-            # print("Scale Factor Offset:\t\t",int(data[dist_start+2],16))
-            scan.scale_fact_offset = int(data[scan.dist_start+2],16)
-
-            # print("Start Angle:\t\t\t",uint32(data[dist_start+3])/10000,"°")
-            scan.start_ang = uint32(data[scan.dist_start+3])/10000
-
-            # print("Size of single angular step:\t",int(data[dist_start+4],16)/10000,"°")
-            scan.angle_res = int(data[scan.dist_start+4],16)/10000
-
-
-            # print("Amount of Data:\t\t\t",data_amnt,"\n")
-            scan.data_amnt = int(data[scan.dist_start+5],16)
-
-            scan.dist_end = (scan.dist_start+6) + scan.data_amnt
-
+            scan.dist_scale_fact = int(data[scan.dist_start+1],16)
+            scan.dist_scale_fact_offset = int(data[scan.dist_start+2],16)
+            scan.dist_start_ang = uint32(data[scan.dist_start+3])/10000
+            scan.dist_angle_res = int(data[scan.dist_start+4],16)/10000
+            scan.dist_data_amnt = int(data[scan.dist_start+5],16)
+            scan.dist_end = (scan.dist_start+6) + scan.dist_data_amnt
             scan.distances = hex_to_meters(data[scan.dist_start+6:scan.dist_end])
 
-            # print(distances)
+        if scan.rssi_start != None:
 
-        # if rssi_start != None:
-
-            # print("\n\tRSSI\n")
-            #
-            # print("Scale Factor:\t\t\t",data[rssi_start+1])
-            # print("Scale Factor Offset:\t\t",data[rssi_start+2])
-            # print("Start Angle:\t\t\t",uint32(data[rssi_start+3])/10000,"°")
-            # print("Size of single angular step:\t",int(data[rssi_start+4],16)/10000,"°")
-            # rssi_amnt = int(data[rssi_start+5],16)
-            # print("Amount of Data:\t\t\t",rssi_amnt,"\n")
-            #
-            # rssi_end = (rssi_start+6) + rssi_amnt
-            #
-            # rssi = hex_to_dec(data[rssi_start+6:rssi_end])
-            # rssi = data[rssi_start+6:rssi_end]
-            # print(rssi)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            scan.rssi_label = data[20]
+            scan.rssi_scale_fact = int(data[scan.rssi_start+1],16)
+            scan.rssi_scale_fact_offset = int(data[scan.rssi_start+2],16)
+            scan.rssi_start_ang = uint32(data[scan.rssi_start+3])/10000
+            scan.rssi_angle_res = int(data[scan.rssi_start+4],16)/10000
+            scan.rssi_data_amnt = int(data[scan.rssi_start+5],16)
+            scan.rssi_end = (scan.rssi_start+6) + scan.rssi_data_amnt
+            scan.rssi = data[scan.rssi_start+6:scan.rssi_end]
 
         return raw_data
-
-
-
-
 
 # LMDscandata - reserved values PAGE 80
 
