@@ -5,10 +5,6 @@ import struct
 import ctypes
 import pytim5xx as lidar   #   Import TIM5xx Library
 
-
-
-
-
 # reset = lidar.rstoutpcnt()      # Reset LIDAR
 # print(reset)
 
@@ -16,10 +12,6 @@ import pytim5xx as lidar   #   Import TIM5xx Library
 
 # data = lidar.scan()
 # print(data)
-
-
-
-
 
 def uint32(i):
     i = struct.unpack('>i', bytes.fromhex(i))[0]
@@ -119,10 +111,6 @@ if rssi_start != None:
     rssi = lidar.hex_to_dec(data[rssi_start+6:rssi_end])
     rssi = data[rssi_start+6:rssi_end]
     print(rssi)
-
-
-
-
 
 # for x in range(10):
 #     data = lidar.scan() # Request Reading from LIDAR.
