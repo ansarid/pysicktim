@@ -93,6 +93,10 @@ def dec_to_ascii(s):
     s = "".join(chr(x) for x in s)
     return s
 
+def hex_to_meters(i):
+    i = [ int(x,16)/1000 for x in i ]
+    return i
+
 def check_error(s):
     if s[0:3] == "sFA":
         error_code = error_codes[int(s[1],16)]
@@ -274,7 +278,8 @@ def scan(cont=False,cont_mode=0,raw=False):    # Get LIDAR Data
     if raw == False:
         answer = answer.split()
         answer = answer[26:26+810]
-        answer = [ int(x,16)/1000 for x in answer ]
+        # answer = [ int(x,16)/1000 for x in answer ]
+        answer = hex_to_meters(answer)
         return answer
 
     elif raw == True:
