@@ -3,8 +3,9 @@ import pytim5xx as lidar
 
 # Repeat code nested in for loop 10 times
 for x in range(10):
+# while True:
 
-	distances = lidar.scan()	# Requests and returns list of LIDAR
-								# distance information in meters
+	lidar.scan()	# Requests and returns list of LIDAR
+					# distance information in meters
 
-	print(distances)	# print distance list
+	print(lidar.scan.distances)		# print distance list

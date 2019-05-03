@@ -1,17 +1,6 @@
 # -*- coding: utf-8 -*-
-
 import os
-import struct
-import ctypes
 import pytim5xx as lidar   #   Import TIM5xx Library
-
-# reset = lidar.rstoutpcnt()      # Reset LIDAR
-# print(reset)
-
-# data = lidar.eventoutputstate(1)
-
-# data = lidar.scan()
-# print(data)
 
 os.system('clear')
 
@@ -50,9 +39,9 @@ print(lidar.scan.distances)
 
 print("\n\tRSSI\n")
 
-print("Scale Factor:\t\t\t", lidar.scan.dist_scale_fact)
-print("Scale Factor Offset:\t\t",lidar.scan.dist_scale_fact_offset)
-print("Start Angle:\t\t\t",lidar.scan.dist_start_ang)
-print("Size of single angular step:\t",lidar.scan.dist_angle_res)
-print("Amount of Data:\t\t\t",lidar.scan.dist_data_amnt,"\n")
+print("Scale Factor:\t\t\t", lidar.scan.rssi_scale_fact)
+print("Scale Factor Offset:\t\t",lidar.scan.rssi_scale_fact_offset)
+print("Start Angle:\t\t\t",lidar.scan.rssi_start_ang)
+print("Size of single angular step:\t",lidar.scan.rssi_angle_res)
+print("Amount of Data:\t\t\t",lidar.scan.rssi_data_amnt,"\n")
 print(lidar.scan.rssi)
