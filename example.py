@@ -66,6 +66,10 @@ print("Amount of Data:\t\t\t",data_amnt)
 # distances = lidar.scan()
 # print(distances)
 # print(data[26:26+data_amnt])
+
+# distance_start =
+# distance_end =
+
 distances = lidar.hex_to_meters(data[26:26+data_amnt])
 # print(distances)
 
@@ -80,10 +84,12 @@ print("Size of single angular step:\t",int(data[30+data_amnt],16)/10000,"°")
 rssi_amnt = int(data[31+data_amnt],16)
 print("Amount of Data:\t\t\t",data_amnt)
 
+# rssi_start =
+# rssi_end =
 
+rssi = data[(26+data_amnt)+rssi_amnt:(26+data_amnt)+rssi_amnt]
 
-
-
+print(rssi)
 
 
 
