@@ -17,6 +17,10 @@ import pytim5xx as lidar   #   Import TIM5xx Library
 # data = lidar.scan()
 # print(data)
 
+
+
+
+
 def uint32(i):
     i = struct.unpack('>i', bytes.fromhex(i))[0]
     return i
@@ -24,7 +28,8 @@ def uint32(i):
 os.system('clear')
 
 # data = lidar.scan(raw=True)
-data = lidar.demo_data()
+data = lidar.demo_data(1)
+# data = lidar.demo_data(2)
 
 # data = data.split()
 # print(data)
@@ -33,7 +38,23 @@ data = lidar.demo_data()
 # cmd = data[1]
 # v_num = data[2]
 
-print()
+dist_start = None
+rssi_start = None
+
+for index, item in enumerate(data):
+    if "DIST" in item and dist_start == None:
+        dist_start = index
+
+    if "RSSI" in item:
+        rssi_start = index
+
+# print(dist_start)
+# print(rssi_start)
+
+# print(data)
+
+print("\nTelegram Length: ", len(data), "\n")
+
 print("Command Type:\t",data[0])
 print("Command     :\t",data[1])
 print("Version Num :\t",int(data[2],16))
@@ -45,51 +66,59 @@ print("Scan Count  :\t",int(data[8],16))
 print()
 print("Time since start (\u03BCs):\t\t",int(data[9],32))
 print("Time of transmission (\u03BCs):\t",int(data[10],32))
-print("Dig Inputs Status:\t\t",int(data[12],8))
-print("Dig Outputs Status:\t\t",int(data[14],8))
+print("Digital Inputs Status:\t\t",int(data[12],8))
+print("Digital Outputs Status:\t\t",int(data[14],8))
 print("Layer Angle :\t\t\t",int(data[15],16))
 print("Scan Frequency (Hz):\t\t",int(data[16],16)/100)
 print("Measurement Frequency (Hz):\t",int(data[17],16)/100) #Math may not be right
 print("Amount of Encoder Data :\t",int(data[18],16))
 print("# of valid 16 bit channels :\t",int(data[19],16))
 
-print("\n\tDistance\n")
-#print(data[20])
+if dist_start != None:
 
-print("Scale Factor:\t\t\t",int(data[21],16))
-print("Scale Factor Offset:\t\t",int(data[22],16))
-print("Start Angle:\t\t\t",uint32(data[23])/10000,"°")
-print("Size of single angular step:\t",int(data[24],16)/10000,"°")
-data_amnt = int(data[25],16)
-print("Amount of Data:\t\t\t",data_amnt)
+    print("\n\tDistance\n")
+    #print(data[20])
 
-# distances = lidar.scan()
-# print(distances)
-# print(data[26:26+data_amnt])
+    print("Scale Factor:\t\t\t",int(data[dist_start+1],16))
+    print("Scale Factor Offset:\t\t",int(data[dist_start+2],16))
+    print("Start Angle:\t\t\t",uint32(data[dist_start+3])/10000,"°")
+    print("Size of single angular step:\t",int(data[dist_start+4],16)/10000,"°")
+    data_amnt = int(data[dist_start+5],16)
+    print("Amount of Data:\t\t\t",data_amnt,"\n")
 
-# distance_start = data.index('DIST1')
-# distance_end = data.index('DIST1') + data_amnt
+    # distances = lidar.scan()
+    # print(distances)
+    # print(data[26:26+data_amnt])
 
-distances = lidar.hex_to_meters(data[26:26+data_amnt])
-# print(distances)
+    dist_end = (dist_start+6) + data_amnt
 
-print("\n\tRSSI\n")
-# print(data[811+26])
-# print(data[26+data_amnt])
+    # print(dist_start)
+    # print(dist_start)
+    # print(dist_end)
 
-print("Scale Factor:\t\t\t",data[27+data_amnt])
-print("Scale Factor Offset:\t\t",data[28+data_amnt])
-print("Start Angle:\t\t\t",uint32(data[29+data_amnt])/10000,"°")
-print("Size of single angular step:\t",int(data[30+data_amnt],16)/10000,"°")
-rssi_amnt = int(data[31+data_amnt],16)
-print("Amount of Data:\t\t\t",data_amnt)
+    distances = lidar.hex_to_meters(data[dist_start+6:dist_end])
+    print(distances)
 
-# rssi_start =
-# rssi_end =
+    # print()
+    # print(dist_end)
+    # print(data[dist_end:len(data)])
 
-rssi = data[(26+data_amnt)+rssi_amnt:(26+data_amnt)+rssi_amnt]
+if rssi_start != None:
 
-print(rssi)
+    print("\n\tRSSI\n")
+
+    print("Scale Factor:\t\t\t",data[rssi_start+1])
+    print("Scale Factor Offset:\t\t",data[rssi_start+2])
+    print("Start Angle:\t\t\t",uint32(data[rssi_start+3])/10000,"°")
+    print("Size of single angular step:\t",int(data[rssi_start+4],16)/10000,"°")
+    rssi_amnt = int(data[rssi_start+5],16)
+    print("Amount of Data:\t\t\t",data_amnt,"\n")
+
+    rssi_end = (rssi_start+6) + rssi_amnt
+
+    rssi = lidar.hex_to_dec(data[rssi_start+6:rssi_end])
+    rssi = data[rssi_start+6:rssi_end]
+    print(rssi)
 
 
 
