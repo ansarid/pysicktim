@@ -30,7 +30,7 @@ print("Measurement Frequency (Hz):\t",lidar.scan.meas_freq)
 print("Amount of Encoder Data :\t",lidar.scan.enc_amount)
 print("# of valid 16 bit channels :\t",lidar.scan.num_16bit_chan)
 
-if dist_start != None:
+if lidar.scan.dist_start != None:
 
     print("\n\tDistance\n")
 
@@ -41,7 +41,7 @@ if dist_start != None:
     print("Amount of Data:\t\t\t",lidar.scan.dist_data_amnt,"\n")
     print(lidar.scan.distances)
 
-if rssi_start != None:
+if lidar.scan.rssi_start != None:
 
     print("\n\tRSSI\n")
 
