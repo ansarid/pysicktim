@@ -340,6 +340,7 @@ def scan(raw=False):    # Get LIDAR Data
             scan.dist_data_amnt = int(data[scan.dist_start+5],16)
             scan.dist_end = (scan.dist_start+6) + scan.dist_data_amnt
             scan.distances = hex_to_meters(data[scan.dist_start+6:scan.dist_end])
+            scan.raw_distances = data[scan.dist_start+6:scan.dist_end]
 
         if scan.rssi_start != None:
 
