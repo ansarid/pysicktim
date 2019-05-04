@@ -38,7 +38,7 @@ def animate(i):
         points = int(data[2])
         distances = [int(x,16)/1000.0 for x in data[3:] ]
         max_angle = (angle_res * points) + min_angle
-        max_distance = 8
+        max_distance = 10
         min_distance = 0.002
 
         if max(distances) > max_distance or min(distances) < min_distance:	# Check if any items in list are larger than max_distance
