@@ -7,7 +7,7 @@ setup(
     license='GNU General Public License v3.0',
     packages=['pysicktim'],
     author='Daniyal Ansari',
-    author_email='daniyal.s.ansari@gmail.com',
+    author_email='daniyal.s.ansari+pypi@gmail.com',
     keywords=['tim561'],
     url='https://github.com/ansarid/pysicktim'
 )
