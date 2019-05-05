@@ -19,5 +19,5 @@ from [PyPI](https://pypi.org/project/pysicktim/)
 
 from source:
 
-    python setup.py install
+    python3 setup.py install
 
