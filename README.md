@@ -19,6 +19,7 @@ from [PyPI](https://pypi.org/project/pysicktim/)
 
 from source:
 
+    git clone https://github.com/ansarid/pysicktim
+    cd pysicktim
     pip3 install -r requirements.txt
     python3 setup.py install
-
