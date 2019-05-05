@@ -93,7 +93,7 @@ if demo != True:
 
     if lidar is None:
         print('LIDAR Device not found!')
-        exit()
+#        exit()
 
 
 ############################################

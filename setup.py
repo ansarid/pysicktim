@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pysicktim',
-    version='0.0.2',
+    version='0.0.3',
     description='TIM561 Python Library',
     license='MIT',
     packages=['pysicktim'],
