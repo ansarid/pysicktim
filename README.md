@@ -1,4 +1,4 @@
-# pysicktim - A Python Library for the SICK TiM5xx
+# PySICKTiM - A Python Library for the SICK TiM5xx
 
 Introduction
 ------
