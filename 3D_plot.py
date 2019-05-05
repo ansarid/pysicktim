@@ -1,8 +1,5 @@
-from mpl_toolkits import mplot3d
+import pptk
 import numpy as np
-import matplotlib.pyplot as plt
-fig = plt.figure()
-ax = plt.axes(projection='3d')
 
 # LIDAR 85cm Travel on Z-Axis
 
@@ -10,28 +7,24 @@ import math
 import numpy as np
 import unicodedata
 
-i = 0
-
-
-
-points = 811
+points = 811        # Points per layer
 min_angle = -45
 angle_res = 0.3333
 max_angle = (angle_res * points) + min_angle
-
 layers = 430
+list_len = points * layers  # So I know how long to make my array
+print(list_len)
 
-x = [0] * 348730
-y = [0] * 348730
-z = [0] * 348730
-
-# 348730 total data points
+x = [0] * list_len
+y = [0] * list_len
+z = [0] * list_len
 
 crane_height = 0.9144   # meters
 
-data = open("./3D_Data/3D_TEST_1.dat",'r')
+data = open("./3D_Data/3D_TEST_3.dat",'r')
 data = data.read()
 
+# Yeah I know this is bad but it was 4 A.M.
 theta = open("./3D_Data/theta.dat",'r')
 theta = theta.read()
 theta = theta.replace(" ","")
@@ -45,7 +38,6 @@ data = data.replace(" ","")
 data = data.split(',')
 data = [ float(b) for b in data ]
 
-
 # Convert Polar to Rectangular
 
 for i in range(len(data)-1):
@@ -54,23 +46,13 @@ for i in range(len(data)-1):
 for i in range(len(data)-1):
     y[i] = data[i]*math.sin(theta[i])
 
+z = np.linspace(0, 0.85, num=list_len)
 
+plot_points = []
 
-# print(len(x))
-# print(len(y))
-# print(len(z))
+for q in range(list_len):
+    point = x[q],y[q],z[q]
+    plot_points.append(point)
 
-print(data[100])
-print(theta[100])
-
-print(x[100])
-print(y[100])
-# print(z[0])
-
-
-z = np.linspace(0, 0.85, num=layers)
-
-# plt.scatter(x, y, s=0.1, alpha=0.5)
-ax.scatter3D(x, y, z, c=z, cmap='Greens');
-# ax.scatter3D(theta, data, z, c=z, cmap='Greens');
-plt.show()
+v = pptk.viewer(plot_points)
+v.set(point_size=0.001)
