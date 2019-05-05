@@ -1,5 +1,5 @@
-# Import pytim5xx Library as "lidar"
-import pytim5xx as lidar
+# Import pysicktim Library as "lidar"
+import pysicktim as lidar
 
 # Repeat code nested in for loop 10 times
 for x in range(10):

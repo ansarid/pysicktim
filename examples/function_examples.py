@@ -2,7 +2,7 @@
 import os
 import struct
 import ctypes
-import pytim5xx as lidar   #   Import TIM5xx Library
+import pysicktim as lidar   #   Import pysicktim library as "lidar"
 
 os.system('clear')
 

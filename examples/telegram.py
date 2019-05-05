@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-import pytim5xx as lidar   #   Import TIM5xx Library
+import pysicktim as lidar   #   Import TIM5xx Library as "lidar"
 
 os.system('clear')
 
