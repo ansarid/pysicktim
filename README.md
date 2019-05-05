@@ -19,6 +19,6 @@ from [PyPI](https://pypi.org/project/pysicktim/)
 
 from source:
 
-    pip3 install requirements.txt
+    pip3 install -r requirements.txt
     python3 setup.py install
 
