@@ -1,5 +1,5 @@
 import socket
-import pytim5xx as lidar
+import pysicktim as lidar
 
 port = 9999
 
