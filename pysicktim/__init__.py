@@ -1,1 +1,1 @@
-import pysicktim.pysicktim
+from pysicktim.pysicktim import *
