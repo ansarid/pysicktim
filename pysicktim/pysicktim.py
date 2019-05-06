@@ -323,7 +323,7 @@ def scan(raw=False):    # Get LIDAR Data
         scan.trans_time =   int(data[10],32)
         # scan.input_stat =   int(str(data[11],data[12]),32)    # Takes both bytes into account
         scan.input_stat =   int(data[12],32)
-        # scan.output_stat =  int(str(data[13],data[14]),8)     # Takes both bytes into account 
+        # scan.output_stat =  int(str(data[13],data[14]),8)     # Takes both bytes into account
         scan.output_stat =  int(data[14],8)
         scan.layer_ang =    int(data[15],16)
         scan.scan_freq =    int(data[16],32)/100
@@ -344,6 +344,18 @@ def scan(raw=False):    # Get LIDAR Data
             scan.distances = hex_to_meters(data[scan.dist_start+6:scan.dist_end])
             scan.raw_distances = " ".join(data[scan.dist_start+6:scan.dist_end])
 
+        else:
+
+            scan.dist_label = None
+            scan.dist_scale_fact = None
+            scan.dist_scale_fact_offset = None
+            scan.dist_start_ang = None
+            scan.dist_angle_res = None
+            scan.dist_data_amnt = None
+            scan.dist_end = None
+            scan.distances = None
+            scan.raw_distances = None
+
         if scan.rssi_start != None:
 
             scan.rssi_label = data[20]
@@ -354,6 +366,17 @@ def scan(raw=False):    # Get LIDAR Data
             scan.rssi_data_amnt = int(data[scan.rssi_start+5],16)
             scan.rssi_end = (scan.rssi_start+6) + scan.rssi_data_amnt
             scan.rssi = data[scan.rssi_start+6:scan.rssi_end]
+
+        else:
+
+            scan.rssi_label = None
+            scan.rssi_scale_fact = None
+            scan.rssi_scale_fact_offset = None
+            scan.rssi_start_ang = None
+            scan.rssi_angle_res = None
+            scan.rssi_data_amnt = None
+            scan.rssi_end = None
+            scan.rssi = None
 
         return raw_data
 
