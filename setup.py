@@ -8,13 +8,13 @@ with open(path.join(this_directory, 'README.md')) as f:
 
 setup(
     name='pysicktim',
-    version='0.0.8',
+    version='0.0.9',
     description='TIM561 Python Library',
     license='GNU General Public License v3.0',
     packages=['pysicktim'],
     author='Daniyal Ansari',
     author_email='daniyal.s.ansari+pypi@gmail.com',
-    keywords=['tim561'],
+    keywords=['tim561','sick','lidar','sicktim','tim5xx','sicktim5xx','sicktim561'],
     url='https://github.com/ansarid/pysicktim',
     long_description=long_description,
     long_description_content_type='text/markdown'
