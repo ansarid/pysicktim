@@ -15,7 +15,7 @@ The functions in this library are based off the [TiM5xx Series LiDAR](https://cd
 Prerequisites
 ------
     pyusb
-
+pip3 install pyusb
 
 Installation
 ------
