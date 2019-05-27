@@ -3,7 +3,7 @@
 Introduction
 ------
 
-This is a python library made to interact with the SICK TiM561 LiDAR sensor over the USB connection. This library was created to help developers who are using python to implement the TiM5xx LiDAR.
+This is a python library made to interact with the SICK TiM561 LiDAR sensor over the USB connection. This library was created to help developers who are using python to implement the TiM5xx LiDAR easily into their projects using python.
 
  The functions of this library includes:
  * Reading Settings and Data
