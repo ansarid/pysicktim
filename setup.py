@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md')) as f:
 
 setup(
     name='pysicktim',
-    version='0.0.9',
+    version='0.1.0',
     description='TIM561 Python Library',
     license='GNU General Public License v3.0',
     packages=['pysicktim'],

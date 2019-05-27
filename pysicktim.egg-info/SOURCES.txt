@@ -1,0 +1,8 @@
+README.md
+setup.py
+pysicktim/__init__.py
+pysicktim/pysicktim.py
+pysicktim.egg-info/PKG-INFO
+pysicktim.egg-info/SOURCES.txt
+pysicktim.egg-info/dependency_links.txt
+pysicktim.egg-info/top_level.txt
