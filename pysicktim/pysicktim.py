@@ -10,15 +10,6 @@ global telegram
 
 demo = False
 
-if demo != True:
-
-    lidar = usb.core.find(idVendor=0x19a2, idProduct=0x5001)
-
-    if lidar is None:
-
-        print('LIDAR Device not found!')
-#        exit()
-
 def demo_data(demo_mode=True,file=None):
 
     demo = demo_mode
@@ -46,6 +37,18 @@ def demo_data(demo_mode=True,file=None):
         telegram = telegram.split(' ')
 
     return telegram
+
+def connected():
+
+    lidar = usb.core.find(idVendor=0x19a2, idProduct=0x5001)
+
+    if lidar is None:
+
+        return 1
+
+    else:
+
+        return 0
 
 ################################################################
 #   ERRORS
@@ -153,13 +156,31 @@ def parse_str(d):
 ## LIDAR FUNCTIONS ##
 
 def read():
-    arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
-    arr = "".join([chr(x) for x in arr[1:-1]])
-    arr = check_error(arr)
-    return arr
+
+    if connected() == 0:
+
+        arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
+        arr = "".join([chr(x) for x in arr[1:-1]])
+        arr = check_error(arr)
+        return arr
+
+    else:
+
+        print("LIDAR Device not found!")
+        return connected()
+
 
 def send(cmd):
-    lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
+
+    if connected() == 0:
+
+        lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
+
+    else:
+
+        print("LIDAR Device not found!")
+        return connected()
+
 ######################
 
 def firmwarev():
@@ -519,6 +540,3 @@ def rstoutpcnt():    # Reset output counter
 #    answer = parse_str(answer)
     return answer
     # sAN LIDrstoutpcnt 0
-
-testing = demo_data()
-print(testing)
