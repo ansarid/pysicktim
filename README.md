@@ -31,5 +31,11 @@ from source:
     pip3 install -r requirements.txt
     python3 setup.py install
 
+## Allow non-root access:
+```
+sudo cp ./udev /etc/udev/rules.d/sick-tim5xx.rules
+sudo reboot
+```
+
 Tutorial
 ------
