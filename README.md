@@ -15,14 +15,15 @@ The functions in this library are based off the [TiM5xx Series LiDAR](https://cd
 Prerequisites
 ------
     pyusb
-pip3 install pyusb
-
+```    
+sudo pip3 install pyusb
+```
 Installation
 ------
 
 from [PyPI](https://pypi.org/project/pysicktim/)
 
-    pip3 install pysicktim
+    sudo pip3 install pysicktim
 
 from source:
 
@@ -36,6 +37,3 @@ from source:
 sudo cp ./udev /etc/udev/rules.d/sick-tim5xx.rules
 sudo reboot
 ```
-
-Tutorial
-------
