@@ -29,8 +29,8 @@ from source:
 
     git clone https://github.com/ansarid/pysicktim
     cd pysicktim
-    pip3 install -r requirements.txt
-    python3 setup.py install
+    sudo pip3 install -r requirements.txt
+    sudo python3 setup.py install
 
 ### Allow non-root access:
 ```
