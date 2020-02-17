@@ -13,6 +13,6 @@ while 1:
         packet = str(int(lidar.scan.dist_start_ang)) , str(int(lidar.scan.dist_angle_res*10000)) , str(lidar.scan.dist_data_amnt), lidar.scan.raw_distances
         packet = " ".join(packet)
         socket.sendto(packet.encode(), ip)
-    except:
+    except KeyboardInterrupt:
         socket.sendto(packet.encode(), ip)
         pass
