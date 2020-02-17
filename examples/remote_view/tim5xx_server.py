@@ -14,5 +14,7 @@ while 1:
         packet = " ".join(packet)
         socket.sendto(packet.encode(), ip)
     except KeyboardInterrupt:
+        exit()
+    except:
         socket.sendto(packet.encode(), ip)
         pass
