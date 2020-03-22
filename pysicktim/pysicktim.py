@@ -5,60 +5,6 @@ import unicodedata
 import struct
 import ctypes
 
-global demo
-global telegram
-
-demo = False
-
-def demo_data(demo_mode=True,file=None):
-
-    demo = demo_mode
-
-    telegram = ''
-
-    if file != None:
-
-        try:
-
-            file = open(file, 'r')
-            telegram =file.read()
-
-        except FileNotFoundError:
-
-            print("Error: Demo data file path not valid!")
-            pass
-
-    elif file != None and demo_mode == False:
-
-        return 0
-
-    elif file == None and demo_mode == True:
-
-        telegram = "sRA LMDscandata 1 1 1078AAA 0 0 BFD BFF CFACE0D CFAE156 0 0 1 0 0 5DC A2 0 1 DIST1 3F800000 00000000 FFF92230 D05 32B 24B 257 260 277 287 28D 296 29A 2A2 2A1 28E 280 284 28C 287 280 292 29A 2A1 2A0 29C 29D 29C 297 295 294 284 284 276 274 278 277 279 28C 28B 28A 28F 29A 287 279 280 285 284 27F 27F 284 278 27A 275 273 272 25B 22C 221 21C 218 21A 212 216 21D 23E 25D 25F 25B 24E 254 252 256 24B 243 22D 21A 20F 211 213 20F 216 224 234 241 242 241 242 23B 241 23A 230 235 22B 21F 218 206 1EE 1B8 186 17B 17A 173 173 171 171 16A 16B 16D 16B 16B 168 16D 168 168 167 165 166 165 168 167 165 161 162 163 15F 164 15F 15E 157 15E 158 158 154 153 156 154 151 156 15C 18C 1D7 1ED 1F8 20B 208 20D 214 215 21C 21C 21B 225 224 22A 224 228 229 229 22A 22D 225 22A 220 225 229 225 226 22C 228 22C 22B 229 22A 21A 219 20E 204 205 1FD 204 204 203 200 205 205 205 205 205 205 206 20B 207 20C 20E 212 226 27A 2B0 2AE 2AC 2B0 2B7 2B5 2C3 2CE 2CE 2CC 2DA 2D9 2DF 2E1 2E3 2E2 2E3 2E8 2EC 2EC 2F3 2F5 2FA 2FA 2FA 2FD 306 305 301 305 310 30C 313 318 31D 318 31B 324 322 31D 32A 32B 32F 331 334 336 339 335 339 340 345 34A 34A 34A 31C 270 243 23D 246 247 24C 24B 245 241 249 24D 24E 249 242 254 24E 254 258 250 254 25C 257 250 252 255 255 255 256 258 25C 25B 25A 260 25B 25E 25C 262 260 263 264 266 268 26A 26A 26B 26C 26D 270 26F 26E 271 273 272 272 278 277 27C 27A 27B 281 280 27F 282 283 280 283 288 288 288 28D 28B 290 291 293 293 297 299 29B 29B 29D 2A4 2A1 2A6 2A8 2A8 2A9 2AD 2AF 2B2 2B2 2B8 2B5 2BA 2BC 2BE 2C3 2C6 2C7 2C9 2C8 2D0 2D3 2D1 2D5 2D9 2DB 2DB 2E3 2E0 2E5 2EC 2ED 2EE 2F3 2F4 2FD 2FD 300 301 2FE 2F9 2EE 674 655 65F 654 667 673 67E 680 688 69C 6B4 0 393 38B 0 65A 65E 66A 674 674 67D 686 689 66E 669 6AC 79B 7FE 813 80E 817 80F 810 80F 81B 811 7F7 7CA 7D3 7F8 7D2 7E3 7FB 6A8 4BB 412 4D0 583 58B 592 5F4 6E2 6F0 698 6B4 6BA 67A 643 625 635 674 6B1 6B3 6A9 67D 6A3 6B1 694 675 684 6AD 6CD 669 66B 7FC 859 863 862 865 85C 700 6D0 6E5 6E2 70B 716 717 714 705 703 6DD 2 2 62B 5F5 5E9 5EE 5F0 5F7 D22 0 0 0 0 0 0 644 640 639 63A 639 646 643 651 657 65A 693 7A7 7CA 7DB 7E2 7EA 7EF 7FD 807 811 815 824 82C 834 83D 84A 852 860 86B 876 879 889 89A 8A3 8B0 8BE 8CC 8D9 8ED 8F4 8F1 8EA 900 916 926 926 92E 936 93C 943 94E 94D 959 962 961 96F 972 985 98A 98C 993 99B 9A6 9B1 9BA 9BF 9C6 9D8 9D9 9EA 9F2 9FC 9FB 9E5 9CA 9C7 9CB 9B7 9AD 9A6 9A7 9B5 9C7 9DA 9EC 9FF A14 A1F A37 0 0 0 0 0 0 0 1139 0 0 0 EB9 ED3 EF4 F1B F3C F5A 8BA 8B3 8BD FCB 1007 1055 1076 1097 1060 1044 1049 104E 105B 1069 1068 1075 1076 1086 108F 10AE 3E4 374 2F6 306 2F7 2FE 301 2FA 2F0 2F3 308 30A 309 308 314 321 37C 3BF 3BC 3BD 3C0 3C1 3BA 3C3 3BB 3C2 3C3 3C1 3C7 3C0 3C2 3BC 3BF 3C5 3CB 3C3 3C9 3C5 3C7 3CD 3BE 3C1 3B1 3B9 3BC 3C0 3BE 3C3 3C7 3CC 3CE 3DE 3DF 3DB 3E3 3EA 3F5 401 400 40B 424 43E 44E 2056 ED3 EC2 EBD EBA EBA EBD EBA EB8 EB5 EB8 EBA 805 7B8 7A1 794 78B 780 774 76B 767 761 762 763 779 7B0 7F0 7FA 803 812 81B 81D 819 8AE 86C 117A 1184 1184 118E 118E 1197 1195 1193 1191 1197 119B 11AB 11AD 11A3 11A5 11B3 11C7 11F5 234E 11FE 602 600 5FF 5FF 60A 0 0 0 0 0 0 0 0 0 7F8 7AA D2C D23 D2B 0 0 0 1348 1327 1310 1308 B6F B8D BD0 CCA CEC CF1 D0A 847 85E 83F 82B 818 807 7F9 801 80A 2 870 853 83B 81D 814 7E2 7C3 7BC 7BF 380 391 390 375 37A 37C A19 0 2 2 2 2DA 33A 34A 34E 346 982 AC 86 29B 295 9B 7B 73 72 77 72 70 73 71 73 74 77 72 71 71 77 79 79 0 0 1 7 Front 0 0 0"
-
-    if type(telegram) != list:
-        telegram = remove_control_characters(telegram)
-#        telegram = telegram.split(' ')
-
-        if "LMDscandata" not in telegram:
-            raise InvalidData("Demo data is corrupt or invalid.")
-            return 1
-
-    return telegram
-
-def connected():
-
-    lidar = usb.core.find(idVendor=0x19a2, idProduct=0x5001)
-
-    if lidar is None:
-
-        raise LidarNotFound("LiDAR Device is not connected!")
-        return 1
-
-    else:
-
-        return 0
-
 ################################################################
 #   ERRORS
 
@@ -128,11 +74,6 @@ error_descriptions = {
     "Sopas_Error_ComplexArraysNotSupported": "Device was built with „ComplexArraysSuppressed“ because the compiler does not allow recursions. But now a complex dataay was found. This is an internal error that should never happen in a released device."
     }
 
-
-
-############################################
-#   Basic Settings
-
 def remove_control_characters(s):
     s = "".join(ch for ch in s if unicodedata.category(ch)[0]!="C")
     return s
@@ -172,389 +113,397 @@ def parse_str(d):
 
 ## LIDAR FUNCTIONS ##
 
-def read():
+class LiDAR:
 
-    if connected() == 0:
+    def connect(self, idVendor=0x19a2, idProduct=0x5001):
 
-        arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
-        arr = "".join([chr(x) for x in arr[1:-1]])
-        arr = check_error(arr)
-        return arr
+        lidar = usb.core.find(idVendor, idProduct)
 
-    else:
+        if lidar is None:
 
-        raise LidarNotFound("LiDAR Device is not connected!")
-        return 1
+            raise LidarNotFound("LiDAR Device is not connected!")
+            return 1
 
-def send(cmd):
+        else:
 
-    if connected() == 0:
+            return 0
 
-        lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
+    def read(self):
 
-    else:
+        if connected() == 0:
 
-        print("LIDAR Device not found!")
-        return connected()
+            arr = lidar.read(1|usb.ENDPOINT_IN,65535,timeout=100)
+            arr = "".join([chr(x) for x in arr[1:-1]])
+            arr = check_error(arr)
+            return arr
 
-######################
+        else:
 
-def firmwarev():
-    send('sRN FirmwareVersion')
-    answer = read()
-    answer = answer.split()
-    answer = answer[-1]
-    return answer
+            raise LidarNotFound("LiDAR Device is not connected!")
+            return 1
 
-def deviceident():
-    send('sRI0')
-    answer = read()
-    answer = answer.split()
-    answer = answer[3] + ' ' + answer[4] + ' ' + answer[5]
-    return answer
+    def send(self, cmd):
 
-def setaccessmode(user="03",password="F4724744"):
-    send('sMN SetAccessMode '+user+" "+password)
-    answer = read()
-    if answer == "sAN SetAccessMode 1":
-        return 0
-    else:
+        if connected() == 0:
+
+            lidar.write(2|usb.ENDPOINT_OUT,"\x02"+cmd+"\x03\0",0)
+
+        else:
+
+            print("LIDAR Device not found!")
+            return connected()
+
+    ######################
+
+    def firmwarev(self):
+        send('sRN FirmwareVersion')
+        answer = read()
+        answer = answer.split()
+        answer = answer[-1]
         return answer
 
-def scancfg():   # Read for frequency and angular resolution
-    # Request Read Command
-    # sRN LMPscancfg
-    send('sRN LMPscancfg')
-    answer = read()
-    answer = answer.split()
-
-    if len(answer) == 7:
-        scan_freq = int(answer[2],16)/100
-        sectors = int(answer[3],16)
-        ang_res = int(answer[4],16)/10000   # Manual says uint_32?
-        start_ang = int(answer[5],32)/10000
-        stop_ang = int(answer[6],32)/10000
-        return [scan_freq,sectors,ang_res,start_ang,stop_ang]
-
-    else:
+    def deviceident(self):
+        send('sRI0')
+        answer = read()
+        answer = answer.split()
+        answer = answer[3] + ' ' + answer[4] + ' ' + answer[5]
         return answer
 
-def startmeas():   # Start measurement
-    # sMN LMCstartmeas
-    send('sMN LMCstartmeas')
-    answer = read()
-    if answer == "sAN LMCstartmeas 0":
-        return 0
-    else:
-        return answer
-    #   Start the laser and (unless in Standby mode) the motor of the the device
+    def setaccessmode(self, user="03",password="F4724744"):
+        send('sMN SetAccessMode '+user+" "+password)
+        answer = read()
+        if answer == "sAN SetAccessMode 1":
+            return 0
+        else:
+            return answer
 
-def stopmeas():   # Stop measurement
-    # sMN LMCstopmeas
-    send('sMN LMCstopmeas')
-    answer = read()
-    if answer == "sAN LMCstopmeas 0":
-        return 0
-    else:
-        return answer
-    #   Shut off the laser and stop the motor of the the device
+    def scancfg(self):   # Read for frequency and angular resolution
+        # Request Read Command
+        # sRN LMPscancfg
+        send('sRN LMPscancfg')
+        answer = read()
+        answer = answer.split()
 
-def loadfacdef():   # Load factory defaults
-    # sMN mSCloadfacdef
-    send('sMN mSCloadfacdef')
-    answer = read()
-    if answer == "sAN mSCloadfacdef":
-        return 0
-    else:
-        return answer
+        if len(answer) == 7:
+            scan_freq = int(answer[2],16)/100
+            sectors = int(answer[3],16)
+            ang_res = int(answer[4],16)/10000   # Manual says uint_32?
+            start_ang = int(answer[5],32)/10000
+            stop_ang = int(answer[6],32)/10000
+            return [scan_freq,sectors,ang_res,start_ang,stop_ang]
 
-def loadappdef():    # Load application defaults
-    # sMN mSCloadappdef
-    send('sMN mSCloadappdef')
-    answer = read()
-    return answer
+        else:
+            return answer
 
-def checkpassword(user,password):    # Check password
-    # sMN CheckPassword 03 19 20 E4 C9
-    send('sMN CheckPassword '+user+' '+password)
-    answer = read()
-    return answer
-    # sAN CheckPassword  1
+    def startmeas(self):   # Start measurement
+        # sMN LMCstartmeas
+        send('sMN LMCstartmeas')
+        answer = read()
+        if answer == "sAN LMCstartmeas 0":
+            return 0
+        else:
+            return answer
+        #   Start the laser and (unless in Standby mode) the motor of the the device
 
-def reboot():    # Reboot device
-    # sMN mSCreboot
-    send('sMN mSCreboot')#
-    answer = read()
-    if answer == "sAN mSCreboot":
-        return 0
-    else:
-        return answer
-    # sAN mSCreboot
+    def stopmeas(self):   # Stop measurement
+        # sMN LMCstopmeas
+        send('sMN LMCstopmeas')
+        answer = read()
+        if answer == "sAN LMCstopmeas 0":
+            return 0
+        else:
+            return answer
+        #   Shut off the laser and stop the motor of the the device
 
-def writeall():    # Save parameters permanently
-    # sMN mEEwriteall
-    send('sMN mEEwriteall')
-    answer = read()
-    return answer
-    # sAN mEEwriteall 1
+    def loadfacdef(self):   # Load factory defaults
+        # sMN mSCloadfacdef
+        send('sMN mSCloadfacdef')
+        answer = read()
+        if answer == "sAN mSCloadfacdef":
+            return 0
+        else:
+            return answer
 
-def run():    # Set to run
-    # sMN Run
-    send('sMN Run')
-    answer = read()
-    if answer == "sAN Run 1":
-        return 0
-    else:
-        return answer
-    # sAN Run 1
-
-#####################################################################
-
-#   Measurement output telegram
-
-
-#DOES NOT WORK YET
-def scandatacfg(channel='01 00', rem_ang=1, res=1, unit=0, enc='00 00', pos=0, name=0, comment=0, time=0, out_rate='+1'):    # Configure the data content for the scan
-    # sWN LMDscandatacfg 01 00 1 1 0 00 00 0 0 0 0 +1
-    # sWN LMDscandatacfg 01 00 1 1 0 00 00 0  0 0 +10
-    # sWN LMDscandatacfg 02 0 0 1 0 01 0 0 0 0 0 +10
-    send('sWN LMDscandatacfg '+str(channel)+' '+str(rem_ang)+' '+str(res)+' '+str(unit)+' '+str(enc)+' '+str(pos)+' '+str(name)+' '+str(comment)+' '+str(time)+' '+str(out_rate))
-    answer = read()
-    if answer == "sWA LMDscandatacfg":
-        return 0
-    else:
+    def loadappdef(self):    # Load application defaults
+        # sMN mSCloadappdef
+        send('sMN mSCloadappdef')
+        answer = read()
         return answer
 
-    # sWA LMDscandatacfg
+    def checkpassword(self,user,password):    # Check password
+        # sMN CheckPassword 03 19 20 E4 C9
+        send('sMN CheckPassword '+user+' '+password)
+        answer = read()
+        return answer
+        # sAN CheckPassword  1
 
-def outputRange():    # Configure measurement angle of the scandata for output
-    # sWN LMPoutputRange 1 1388 0 DBBA0
-    send('sWN LMPoutputRange')
-    answer = read()
-    return answer
-    # sWA LMPoutputRange
+    def reboot(self):    # Reboot device
+        # sMN mSCreboot
+        send('sMN mSCreboot')#
+        answer = read()
+        if answer == "sAN mSCreboot":
+            return 0
+        else:
+            return answer
+        # sAN mSCreboot
 
-def outputRange():    # Read for actual output range
-    # sRN LMPoutputRange
-    send('sRN LMPoutputRange')
-    answer = read()
-    return answer
-    # sRA LMPoutputRange 1 1388 FFF92230 225510
+    def writeall(self):    # Save parameters permanently
+        # sMN mEEwriteall
+        send('sMN mEEwriteall')
+        answer = read()
+        return answer
+        # sAN mEEwriteall 1
 
-def scan(raw=False, demo=False, file=None):    # Get LIDAR Data
+    def run(self):    # Set to run
+        # sMN Run
+        send('sMN Run')
+        answer = read()
+        if answer == "sAN Run 1":
+            return 0
+        else:
+            return answer
+        # sAN Run 1
 
-    if demo == False:
+    #####################################################################
+
+    #   Measurement output telegram
+
+
+    # DOES NOT WORK YET
+    def scandatacfg(self, channel='01 00', rem_ang=1, res=1, unit=0, enc='00 00', pos=0, name=0, comment=0, time=0, out_rate='+1'):    # Configure the data content for the scan
+        # sWN LMDscandatacfg 01 00 1 1 0 00 00 0 0 0 0 +1
+        # sWN LMDscandatacfg 01 00 1 1 0 00 00 0  0 0 +10
+        # sWN LMDscandatacfg 02 0 0 1 0 01 0 0 0 0 0 +10
+        send('sWN LMDscandatacfg '+str(channel)+' '+str(rem_ang)+' '+str(res)+' '+str(unit)+' '+str(enc)+' '+str(pos)+' '+str(name)+' '+str(comment)+' '+str(time)+' '+str(out_rate))
+        answer = read()
+        if answer == "sWA LMDscandatacfg":
+            return 0
+        else:
+            return answer
+
+        # sWA LMDscandatacfg
+
+    def outputRange(self):    # Configure measurement angle of the scandata for output
+        # sWN LMPoutputRange 1 1388 0 DBBA0
+        send('sWN LMPoutputRange')
+        answer = read()
+        return answer
+        # sWA LMPoutputRange
+
+    def outputRange(self):    # Read for actual output range
+        # sRN LMPoutputRange
+        send('sRN LMPoutputRange')
+        answer = read()
+        return answer
+        # sRA LMPoutputRange 1 1388 FFF92230 225510
+
+    def scan(self, raw=False):    # Get LIDAR Data
 
         send('sRN LMDscandata')
         raw_data = read()
         data = raw_data
 
-    elif demo == True:
+        if raw == False:
 
-        raw_data = demo_data(file=file)
-        data = raw_data
+            self.scan.dist_start = None
+            self.scan.rssi_start = None
 
-    if raw == False:
+            print(data)
 
-        scan.dist_start = None
-        scan.rssi_start = None
+            data = data.split()
 
-        print(data)
+            for index, item in enumerate(data):
+                if "DIST" in item and self.scan.dist_start == None:
+                    self.scan.dist_start = index
 
-        data = data.split()
+                if "RSSI" in item:
+                    self.scan.rssi_start = index
 
-        for index, item in enumerate(data):
-            if "DIST" in item and scan.dist_start == None:
-                scan.dist_start = index
+            self.scan.telegram_len = len(data)
+            self.scan.cmd_type =         data[0]
+            self.scan.cmd =              data[1]
+            self.scan.version =      int(data[2],16)
+            self.scan.device_num =   int(data[3],16)
+            self.scan.serial_num =   int(data[4],16)
+            self.scan.device_stat =  int(data[6],8)
+            self.scan.telegram_cnt = int(data[7],16)
+            self.scan.scan_cnt =     int(data[8],16)
+            self.scan.uptime =       int(data[9],32)
+            self.scan.trans_time =   int(data[10],32)
+            # self.scan.input_stat =   int(str(data[11],data[12]),32)    # Takes both bytes into account
+            self.scan.input_stat =   int(data[12],32)
+            # self.scan.output_stat =  int(str(data[13],data[14]),8)     # Takes both bytes into account
+            self.scan.output_stat =  int(data[14],8)
+            self.scan.layer_ang =    int(data[15],16)
+            self.scan.scan_freq =    int(data[16],32)/100
+            self.scan.meas_freq =    int(data[17],16)/100   # Math may not be right
+            self.scan.enc_amount =   int(data[18],16)
 
-            if "RSSI" in item:
-                scan.rssi_start = index
+            self.scan.num_16bit_chan = int(data[19],16)
 
-        scan.telegram_len = len(data)
-        scan.cmd_type =         data[0]
-        scan.cmd =              data[1]
-        scan.version =      int(data[2],16)
-        scan.device_num =   int(data[3],16)
-        scan.serial_num =   int(data[4],16)
-        scan.device_stat =  int(data[6],8)
-        scan.telegram_cnt = int(data[7],16)
-        scan.scan_cnt =     int(data[8],16)
-        scan.uptime =       int(data[9],32)
-        scan.trans_time =   int(data[10],32)
-        # scan.input_stat =   int(str(data[11],data[12]),32)    # Takes both bytes into account
-        scan.input_stat =   int(data[12],32)
-        # scan.output_stat =  int(str(data[13],data[14]),8)     # Takes both bytes into account
-        scan.output_stat =  int(data[14],8)
-        scan.layer_ang =    int(data[15],16)
-        scan.scan_freq =    int(data[16],32)/100
-        scan.meas_freq =    int(data[17],16)/100   # Math may not be right
-        scan.enc_amount =   int(data[18],16)
+            if self.scan.dist_start != None:
 
-        scan.num_16bit_chan = int(data[19],16)
+                self.scan.dist_label = data[20]
+                self.scan.dist_scale_fact = int(data[self.scan.dist_start+1],16)
+                self.scan.dist_scale_fact_offset = int(data[self.scan.dist_start+2],16)
+                self.scan.dist_start_ang = uint32(data[self.scan.dist_start+3])/10000
+                self.scan.dist_angle_res = int(data[self.scan.dist_start+4],16)/10000
+                self.scan.dist_data_amnt = int(data[self.scan.dist_start+5],16)
+                self.scan.dist_end = (self.scan.dist_start+6) + self.scan.dist_data_amnt
+                self.scan.distances = hex_to_meters(data[self.scan.dist_start+6:self.scan.dist_end])
+                self.scan.raw_distances = " ".join(data[self.scan.dist_start+6:self.scan.dist_end])
 
-        if scan.dist_start != None:
+            else:
 
-            scan.dist_label = data[20]
-            scan.dist_scale_fact = int(data[scan.dist_start+1],16)
-            scan.dist_scale_fact_offset = int(data[scan.dist_start+2],16)
-            scan.dist_start_ang = uint32(data[scan.dist_start+3])/10000
-            scan.dist_angle_res = int(data[scan.dist_start+4],16)/10000
-            scan.dist_data_amnt = int(data[scan.dist_start+5],16)
-            scan.dist_end = (scan.dist_start+6) + scan.dist_data_amnt
-            scan.distances = hex_to_meters(data[scan.dist_start+6:scan.dist_end])
-            scan.raw_distances = " ".join(data[scan.dist_start+6:scan.dist_end])
+                self.scan.dist_label = None
+                self.scan.dist_scale_fact = None
+                self.scan.dist_scale_fact_offset = None
+                self.scan.dist_start_ang = None
+                self.scan.dist_angle_res = None
+                self.scan.dist_data_amnt = None
+                self.scan.dist_end = None
+                self.scan.distances = None
+                self.scan.raw_distances = None
 
-        else:
+            if self.scan.rssi_start != None:
 
-            scan.dist_label = None
-            scan.dist_scale_fact = None
-            scan.dist_scale_fact_offset = None
-            scan.dist_start_ang = None
-            scan.dist_angle_res = None
-            scan.dist_data_amnt = None
-            scan.dist_end = None
-            scan.distances = None
-            scan.raw_distances = None
+                self.scan.rssi_label = data[20]
+                self.scan.rssi_scale_fact = int(data[self.scan.rssi_start+1],16)
+                self.scan.rssi_scale_fact_offset = int(data[self.scan.rssi_start+2],16)
+                self.scan.rssi_start_ang = uint32(data[self.scan.rssi_start+3])/10000
+                self.scan.rssi_angle_res = int(data[self.scan.rssi_start+4],16)/10000
+                self.scan.rssi_data_amnt = int(data[self.scan.rssi_start+5],16)
+                self.scan.rssi_end = (self.scan.rssi_start+6) + self.scan.rssi_data_amnt
+                self.scan.rssi = data[self.scan.rssi_start+6:self.scan.rssi_end]
 
-        if scan.rssi_start != None:
+            else:
 
-            scan.rssi_label = data[20]
-            scan.rssi_scale_fact = int(data[scan.rssi_start+1],16)
-            scan.rssi_scale_fact_offset = int(data[scan.rssi_start+2],16)
-            scan.rssi_start_ang = uint32(data[scan.rssi_start+3])/10000
-            scan.rssi_angle_res = int(data[scan.rssi_start+4],16)/10000
-            scan.rssi_data_amnt = int(data[scan.rssi_start+5],16)
-            scan.rssi_end = (scan.rssi_start+6) + scan.rssi_data_amnt
-            scan.rssi = data[scan.rssi_start+6:scan.rssi_end]
+                self.scan.rssi_label = None
+                self.scan.rssi_scale_fact = None
+                self.scan.rssi_scale_fact_offset = None
+                self.scan.rssi_start_ang = None
+                self.scan.rssi_angle_res = None
+                self.scan.rssi_data_amnt = None
+                self.scan.rssi_end = None
+                self.scan.rssi = None
 
-        else:
+            return raw_data
 
-            scan.rssi_label = None
-            scan.rssi_scale_fact = None
-            scan.rssi_scale_fact_offset = None
-            scan.rssi_start_ang = None
-            scan.rssi_angle_res = None
-            scan.rssi_data_amnt = None
-            scan.rssi_end = None
-            scan.rssi = None
+    # LMDscandata - reserved values PAGE 80
 
-        return raw_data
+    #####################################################################
+    #   Filter
 
-# LMDscandata - reserved values PAGE 80
+    def particle(self):    # Set particle filter
+        # sWN LFPparticle 1 +500
+        send('sWN LFPparticle')
+        answer = read()
+        return answer
+        # sWA LFPparticle
 
-#####################################################################
-#   Filter
-
-def particle():    # Set particle filter
-    # sWN LFPparticle 1 +500
-    send('sWN LFPparticle')
-    answer = read()
-    return answer
-    # sWA LFPparticle
-
-def meanfilter(status_code=0,number_of_scans="+10"):    # Set mean filter
-    # sWN LFPmeanfilter 1 +10 0
-    send('sWN LFPmeanfilter '+status_code+' '+number_of_scans+' 0')
-    answer = read()
-    return answer
-    # sWA LFPmeanfilter
+    def meanfilter(self, status_code=0,number_of_scans="+10"):    # Set mean filter
+        # sWN LFPmeanfilter 1 +10 0
+        send('sWN LFPmeanfilter '+status_code+' '+number_of_scans+' 0')
+        answer = read()
+        return answer
+        # sWA LFPmeanfilter
 
 
-#####################################################################
-#   Outputs
+    #####################################################################
+    #   Outputs
 
 
 
-def outputstate():    # Read state of the outputs
-    # sRN LIDoutputstate
-    send('sRN LIDoutputstate')
+    def outputstate(self):    # Read state of the outputs
+        # sRN LIDoutputstate
+        send('sRN LIDoutputstate')
 
-def eventoutputstate(state):    # Send outputstate by event
-    send('sEN LIDoutputstate '+str(state))
-    answer = read()
-    return answer
+    def eventoutputstate(self, state):    # Send outputstate by event
+        send('sEN LIDoutputstate '+str(state))
+        answer = read()
+        return answer
 
-def setoutput():    # Set output state
-    # sMN mDOSetOutput 1 1
-    send('sMN mDOSetOutput')
-    answer = read()
-    return answer
-    # sAN mDOSetOutput 1
-#####################################################################
-#   Inputs
+    def setoutput(self):    # Set output state
+        # sMN mDOSetOutput 1 1
+        send('sMN mDOSetOutput')
+        answer = read()
+        return answer
+        # sAN mDOSetOutput 1
+    #####################################################################
+    #   Inputs
 
-def debtim():    # Set debouncing time for input x
-    # sWN DI3DebTim +10
-    send('sWN DI3DebTim')
-    answer = read()
-    return answer
-    # sWA DI3DebTim
+    def debtim(self):    # Set debouncing time for input x
+        # sWN DI3DebTim +10
+        send('sWN DI3DebTim')
+        answer = read()
+        return answer
+        # sWA DI3DebTim
 
-def deviceident():    # Read device ident
-    # sRN DeviceIdent
-    send('sRN DeviceIdent')
-    answer = read()
-    answer = answer.split()
-    answer = answer[3] + ' ' + answer[4] + ' ' + answer[5]
-    return answer
-    # sRA DeviceIdent 10 LMS10x_FieldEval 10 V1.36-21.10.2010
+    def deviceident(self):    # Read device ident
+        # sRN DeviceIdent
+        send('sRN DeviceIdent')
+        answer = read()
+        answer = answer.split()
+        answer = answer[3] + ' ' + answer[4] + ' ' + answer[5]
+        return answer
+        # sRA DeviceIdent 10 LMS10x_FieldEval 10 V1.36-21.10.2010
 
-def devicestate():    # Read device state
-    # sRN SCdevicestate
-    send('sRN SCdevicestate')
-    answer = read()
-    return answer
-    # sRA SCdevicestate 0
+    def devicestate(self):    # Read device state
+        # sRN SCdevicestate
+        send('sRN SCdevicestate')
+        answer = read()
+        return answer
+        # sRA SCdevicestate 0
 
-def ornr():    # Read device information
-    # sRN DIornr
-    send('sRN DIornr')
-    answer = read()
-    return answer
-    # sRA DIornr 1071419
+    def ornr(self):    # Read device information
+        # sRN DIornr
+        send('sRN DIornr')
+        answer = read()
+        return answer
+        # sRA DIornr 1071419
 
-def devicetype():    # Device type
-    # sRN DItype
-    send('sRN DItype')
-    answer = read()
-    return answer
-    # sRA DItype E TIM561-2050101
+    def devicetype(self):    # Device type
+        # sRN DItype
+        send('sRN DItype')
+        answer = read()
+        return answer
+        # sRA DItype E TIM561-2050101
 
-def oprh():    # Read operating hours
-    # sRN ODoprh
-    send('sRN ODoprh')
-    answer = read()
-    return answer
-    # sRA ODoprh 2DC8B
+    def oprh(self):    # Read operating hours
+        # sRN ODoprh
+        send('sRN ODoprh')
+        answer = read()
+        return answer
+        # sRA ODoprh 2DC8B
 
-def pwrc():    # Read power on counter
-    # sRN ODpwrc
-    send('sRN ODpwrc')
-    answer = read()
-    return answer
-    # sRA ODpwrc 752D
+    def pwrc(self):    # Read power on counter
+        # sRN ODpwrc
+        send('sRN ODpwrc')
+        answer = read()
+        return answer
+        # sRA ODpwrc 752D
 
-def setLocationName(name):    # Set device name
-    # sWN LocationName +13 OutdoorDevice
-    name = " " + name
-    string = 'sWN LocationName +'+str(len(name)-1)+name
-    send(string)
-    answer = read()
-    return answer
-    # sWA LocationName
+    def setLocationName(self, name):    # Set device name
+        # sWN LocationName +13 OutdoorDevice
+        name = " " + name
+        string = 'sWN LocationName +'+str(len(name)-1)+name
+        send(string)
+        answer = read()
+        return answer
+        # sWA LocationName
 
-def readLocationName():    # Read for device name
-    # sRN LocationName
-    send('sRN LocationName')
-    answer = read()
-    answer = parse_str(answer)
-    return answer
-    # sRA LocationName D OutdoorDevice
+    def readLocationName(self):    # Read for device name
+        # sRN LocationName
+        send('sRN LocationName')
+        answer = read()
+        answer = parse_str(answer)
+        return answer
+        # sRA LocationName D OutdoorDevice
 
-def rstoutpcnt():    # Reset output counter
-    # sMN LIDrstoutpcnt
-    send('sMN LIDrstoutpcnt')
-    answer = read()
-#    answer = parse_str(answer)
-    return answer
-    # sAN LIDrstoutpcnt 0
+    def rstoutpcnt(self):    # Reset output counter
+        # sMN LIDrstoutpcnt
+        send('sMN LIDrstoutpcnt')
+        answer = read()
+    #    answer = parse_str(answer)
+        return answer
+        # sAN LIDrstoutpcnt 0
