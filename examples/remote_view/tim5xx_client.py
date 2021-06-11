@@ -7,7 +7,7 @@ import matplotlib.animation as animation
 
 class network:
 
-    ip = "192.168.1.1"
+    ip = "192.168.1.16"
     port = 9999
 
 try:
@@ -38,7 +38,8 @@ def animate(i):
         points = int(data[2])
         distances = [int(x,16)/1000.0 for x in data[3:] ]
         max_angle = (angle_res * points) + min_angle
-        max_distance = 10
+        # max_distance = 10
+        max_distance = 6
         min_distance = 0.002
 
         if max(distances) > max_distance or min(distances) < min_distance:	# Check if any items in list are larger than max_distance

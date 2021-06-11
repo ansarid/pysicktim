@@ -1,0 +1,1 @@
+devices = {'TIM561':{'vendorID':0x19a2, 'productID':0x5001},}
